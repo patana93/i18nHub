@@ -1,5 +1,11 @@
+// ignore_for_file: prefer_const_literals_to_create_immutables
+
 import 'package:flutter/material.dart';
+import 'package:i18n_app/widgets/language_selected_list.dart';
 import 'package:i18n_app/widgets/left_panel.dart';
+import 'package:i18n_app/widgets/right_panel.dart';
+
+import '../widgets/add_language_chip.dart';
 
 class Homepage extends StatefulWidget {
   const Homepage({super.key});
@@ -15,6 +21,7 @@ class _HomepageState extends State<Homepage> {
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Row(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             const Expanded(flex: 3, child: LeftPanel()),
@@ -23,17 +30,24 @@ class _HomepageState extends State<Homepage> {
             ),
             Expanded(
                 flex: 7,
-                child: Container(
-                  decoration: BoxDecoration(
-                      color: Colors.grey.withAlpha(28),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(8),
-                      ),
-                      border: Border.all(
-                          width: 1,
-                          style: BorderStyle.solid,
-                          color: Colors.black.withAlpha(125))),
-                )),
+                child: Column(
+                  children: [
+                    const Expanded(flex: 92, child: RightPanel()),
+                    Expanded(
+                        flex: 8,
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            const SizedBox(
+                              width: 10,
+                            ),
+                            const Expanded(
+                                flex: 75, child: LanguageSelectedList()),
+                            const Expanded(flex: 15, child: AddLanguageChip()),
+                          ],
+                        )),
+                  ],
+                ))
           ],
         ),
       ),

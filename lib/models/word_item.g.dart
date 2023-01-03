@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $WordItemNotifierHash() => r'7f2536f44b50a2352495b60ac0fb8cdafa422ea0';
+String $WordItemNotifierHash() => r'263b3650e569a968173cb76ad0c32a7fbeb394ee';
 
 /// See also [WordItemNotifier].
 final wordItemNotifierProvider =
@@ -66,4 +66,24 @@ abstract class _$WordItemFilteredNotifier
     extends AutoDisposeNotifier<List<WordItem>> {
   @override
   List<WordItem> build();
+}
+
+String $WordItemSelectedNotifierHash() =>
+    r'bb0b1805a9eb16fe4568f6653165c78962b75019';
+
+/// See also [WordItemSelectedNotifier].
+final wordItemSelectedNotifierProvider =
+    AutoDisposeNotifierProvider<WordItemSelectedNotifier, WordItem?>(
+  WordItemSelectedNotifier.new,
+  name: r'wordItemSelectedNotifierProvider',
+  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
+      ? null
+      : $WordItemSelectedNotifierHash,
+);
+typedef WordItemSelectedNotifierRef = AutoDisposeNotifierProviderRef<WordItem?>;
+
+abstract class _$WordItemSelectedNotifier
+    extends AutoDisposeNotifier<WordItem?> {
+  @override
+  WordItem? build();
 }
