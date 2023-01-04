@@ -25,9 +25,30 @@ class WordItemNotifier extends _$WordItemNotifier {
     state = [...state, wordItem];
   }
 
-  editWord(String oldKey, WordItem newWordItem) {
+  editWordKey(String oldKey, WordItem newWordItem) {
     removeWord(oldKey);
     addWord(newWordItem);
+  }
+
+  editWordTranslation(String oldKey, WordItem newWordItem) {
+    final int index =
+        state.indexWhere((element) => element.key == newWordItem.key);
+
+    state = [
+      ...state.sublist(0, index),
+      WordItem(key: newWordItem.key, translations: {
+        ...state
+            .firstWhere((element) => element.key == newWordItem.key)
+            .translations,
+        newWordItem.translations.keys.first:
+            newWordItem.translations.values.first,
+      }),
+      ...state.sublist(index + 1),
+    ];
+
+    ref
+        .read(wordItemSelectedNotifierProvider.notifier)
+        .selectWordItem(newWordItem.key);
   }
 
   removeWord(String wordItemId) {
@@ -37,12 +58,12 @@ class WordItemNotifier extends _$WordItemNotifier {
     ];
   }
 
-  clearAll() {
-    state = [];
-  }
-
   bool checkKeyAlreadyExist(String key) {
     return state.map((e) => e.key).toList().any((element) => element == key);
+  }
+
+  clearAll() {
+    state = [];
   }
 }
 

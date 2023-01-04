@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $WordItemNotifierHash() => r'263b3650e569a968173cb76ad0c32a7fbeb394ee';
+String $WordItemNotifierHash() => r'1d4e1c6e196ba04ab34808725a3398a94d093357';
 
 /// See also [WordItemNotifier].
 final wordItemNotifierProvider =

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/widgets/add_key_dialog.dart';
 
+import '../models/text_cursor_position.dart';
 import '../models/word_item.dart';
 
 final TextEditingController _textEditingController = TextEditingController();
@@ -105,9 +106,14 @@ class LeftPanel extends ConsumerWidget {
                   hoverColor: Colors.pink,
                   tileColor: Colors.blue,
                   selectedColor: Colors.amber,
-                  onTap: () => ref
-                      .read(wordItemSelectedNotifierProvider.notifier)
-                      .selectWordItem(list[index].key),
+                  onTap: () {
+                    ref
+                        .read(wordItemSelectedNotifierProvider.notifier)
+                        .selectWordItem(list[index].key);
+                    ref
+                        .read(textCursorPositionNotifierProvider.notifier)
+                        .setTextCursorPosition(0);
+                  },
                   trailing: PopupMenuButton(
                     splashRadius: 24,
                     icon: const Icon(Icons.more_vert),
@@ -129,14 +135,14 @@ class LeftPanel extends ConsumerWidget {
                               builder: (context) {
                                 return AddKeyDialog(
                                   scrollController: _scrollController,
-                                  keyEdit: list[index].key,
+                                  wordItemEdit: list[index],
                                 );
                               },
                             );
                           },
                         ),
                         PopupMenuItem(
-                          child: const Text("Duplicate"),
+                          child: const Text("Duplicate key"),
                           onTap: () {
                             String duplicate = list[index].key;
                             while (ref
@@ -148,6 +154,23 @@ class LeftPanel extends ConsumerWidget {
                             ref.read(wordItemNotifierProvider.notifier).addWord(
                                   WordItem(
                                       key: duplicate, translations: const {}),
+                                );
+                          },
+                        ),
+                        PopupMenuItem(
+                          child: const Text("Duplicate all"),
+                          onTap: () {
+                            String duplicate = list[index].key;
+                            while (ref
+                                .read(wordItemNotifierProvider.notifier)
+                                .checkKeyAlreadyExist(duplicate)) {
+                              duplicate += "_copy";
+                            }
+
+                            ref.read(wordItemNotifierProvider.notifier).addWord(
+                                  WordItem(
+                                      key: duplicate,
+                                      translations: list[index].translations),
                                 );
                           },
                         )

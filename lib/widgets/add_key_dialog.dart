@@ -4,19 +4,20 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/word_item.dart';
 
 class AddKeyDialog extends ConsumerWidget {
-  final String? keyEdit;
+  final WordItem? wordItemEdit;
   final ScrollController scrollController;
-  const AddKeyDialog({required this.scrollController, this.keyEdit, super.key});
+  const AddKeyDialog(
+      {required this.scrollController, this.wordItemEdit, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final TextEditingController textEditingController3 =
         TextEditingController();
-    if (keyEdit != null) {
-      textEditingController3.text = keyEdit!;
+    if (wordItemEdit != null) {
+      textEditingController3.text = wordItemEdit!.key;
     }
     return AlertDialog(
-      title: Text(keyEdit == null ? "Add key" : "Edit key"),
+      title: Text(wordItemEdit == null ? "Add key" : "Edit key"),
       actions: [
         TextButton(
             onPressed: () async {
@@ -27,15 +28,15 @@ class AddKeyDialog extends ConsumerWidget {
                       .checkKeyAlreadyExist(textEditingController3.text)) {
                 return;
               }
-              if (keyEdit == null) {
+              if (wordItemEdit == null) {
                 ref.read(wordItemNotifierProvider.notifier).addWord(WordItem(
                     key: textEditingController3.text, translations: const {}));
               } else {
-                ref.read(wordItemNotifierProvider.notifier).editWord(
-                    keyEdit!,
+                ref.read(wordItemNotifierProvider.notifier).editWordKey(
+                    wordItemEdit!.key,
                     WordItem(
                         key: textEditingController3.text,
-                        translations: const {}));
+                        translations: wordItemEdit!.translations));
               }
 
               await Scrollable.ensureVisible(context);
