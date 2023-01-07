@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String $LanguageSelectedNotifierHash() =>
-    r'5816b1779423efc371f25e41371a75037d3bf4ba';
+    r'3af9dfe768a5955bd0d53f544a8d9ebf76ac61db';
 
 /// See also [LanguageSelectedNotifier].
 final languageSelectedNotifierProvider =

@@ -20,4 +20,8 @@ class LanguageSelectedNotifier extends _$LanguageSelectedNotifier {
         if (languageName != language) language,
     };
   }
+
+  clearAll() {
+    state = {};
+  }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/models/language_selected.dart';
+import 'package:i18n_app/widgets/default_language_chip.dart';
 import 'package:i18n_app/widgets/language_chip.dart';
 
 class LanguageSelectedList extends ConsumerWidget {
@@ -18,10 +19,15 @@ class LanguageSelectedList extends ConsumerWidget {
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2.0),
-            child: LanguageChip(
-                title: ref
-                    .read(languageSelectedNotifierProvider)
-                    .elementAt(index)),
+            child: index == 0
+                ? DefaultLanguageChip(
+                    title: ref
+                        .read(languageSelectedNotifierProvider)
+                        .elementAt(index))
+                : LanguageChip(
+                    title: ref
+                        .read(languageSelectedNotifierProvider)
+                        .elementAt(index)),
           );
         },
       ),

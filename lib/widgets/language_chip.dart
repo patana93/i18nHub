@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../models/language_selected.dart';
+import '../models/word_item.dart';
 import '../utils/const.dart';
 
 class LanguageChip extends ConsumerWidget {
@@ -20,6 +21,8 @@ class LanguageChip extends ConsumerWidget {
       onSelected: null,
       onDeleted: () {
         ref.read(languageSelectedNotifierProvider.notifier).removeLanguage(
+            Const.language.firstWhere((element) => element == title));
+        ref.read(wordNotifierProvider.notifier).removeTranslation(
             Const.language.firstWhere((element) => element == title));
       },
     );

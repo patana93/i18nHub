@@ -29,30 +29,29 @@ class _SystemHash {
   }
 }
 
-String $WordItemNotifierHash() => r'1d4e1c6e196ba04ab34808725a3398a94d093357';
+String $WordNotifierHash() => r'd8cc0bb88894ee93f4f6898fdca657d92afc1eb8';
 
-/// See also [WordItemNotifier].
-final wordItemNotifierProvider =
-    AutoDisposeNotifierProvider<WordItemNotifier, List<WordItem>>(
-  WordItemNotifier.new,
-  name: r'wordItemNotifierProvider',
-  debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
-      ? null
-      : $WordItemNotifierHash,
+/// See also [WordNotifier].
+final wordNotifierProvider =
+    AutoDisposeNotifierProvider<WordNotifier, List<WordModel>>(
+  WordNotifier.new,
+  name: r'wordNotifierProvider',
+  debugGetCreateSourceHash:
+      const bool.fromEnvironment('dart.vm.product') ? null : $WordNotifierHash,
 );
-typedef WordItemNotifierRef = AutoDisposeNotifierProviderRef<List<WordItem>>;
+typedef WordNotifierRef = AutoDisposeNotifierProviderRef<List<WordModel>>;
 
-abstract class _$WordItemNotifier extends AutoDisposeNotifier<List<WordItem>> {
+abstract class _$WordNotifier extends AutoDisposeNotifier<List<WordModel>> {
   @override
-  List<WordItem> build();
+  List<WordModel> build();
 }
 
 String $WordItemFilteredNotifierHash() =>
-    r'82f2b9aaecf67dd2438c2ca2aa4f2e824e8c8149';
+    r'ff2ffca2a32ea3dbc0f528354d4aedd89ae52f75';
 
 /// See also [WordItemFilteredNotifier].
 final wordItemFilteredNotifierProvider =
-    AutoDisposeNotifierProvider<WordItemFilteredNotifier, List<WordItem>>(
+    AutoDisposeNotifierProvider<WordItemFilteredNotifier, List<WordModel>>(
   WordItemFilteredNotifier.new,
   name: r'wordItemFilteredNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -60,30 +59,31 @@ final wordItemFilteredNotifierProvider =
       : $WordItemFilteredNotifierHash,
 );
 typedef WordItemFilteredNotifierRef
-    = AutoDisposeNotifierProviderRef<List<WordItem>>;
+    = AutoDisposeNotifierProviderRef<List<WordModel>>;
 
 abstract class _$WordItemFilteredNotifier
-    extends AutoDisposeNotifier<List<WordItem>> {
+    extends AutoDisposeNotifier<List<WordModel>> {
   @override
-  List<WordItem> build();
+  List<WordModel> build();
 }
 
 String $WordItemSelectedNotifierHash() =>
-    r'bb0b1805a9eb16fe4568f6653165c78962b75019';
+    r'7d78a5496382cccc42e6d8716d3870875a530f26';
 
 /// See also [WordItemSelectedNotifier].
 final wordItemSelectedNotifierProvider =
-    AutoDisposeNotifierProvider<WordItemSelectedNotifier, WordItem?>(
+    AutoDisposeNotifierProvider<WordItemSelectedNotifier, WordModel?>(
   WordItemSelectedNotifier.new,
   name: r'wordItemSelectedNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
       : $WordItemSelectedNotifierHash,
 );
-typedef WordItemSelectedNotifierRef = AutoDisposeNotifierProviderRef<WordItem?>;
+typedef WordItemSelectedNotifierRef
+    = AutoDisposeNotifierProviderRef<WordModel?>;
 
 abstract class _$WordItemSelectedNotifier
-    extends AutoDisposeNotifier<WordItem?> {
+    extends AutoDisposeNotifier<WordModel?> {
   @override
-  WordItem? build();
+  WordModel? build();
 }

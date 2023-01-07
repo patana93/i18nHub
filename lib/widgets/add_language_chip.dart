@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/models/language_selected.dart';
 
+import '../models/word_item.dart';
 import '../utils/const.dart';
 
 class AddLanguageChip extends ConsumerWidget {
@@ -19,6 +20,14 @@ class AddLanguageChip extends ConsumerWidget {
       ),
       label: const Text('Add Language'),
       onPressed: () {
+        final List<String> languagesAvailable = [];
+
+        for (final language in Const.language) {
+          if (!ref.read(languageSelectedNotifierProvider).contains(language)) {
+            languagesAvailable.add(language);
+          }
+        }
+
         showDialog(
           context: context,
           builder: (context) {
@@ -37,7 +46,7 @@ class AddLanguageChip extends ConsumerWidget {
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
                     ),
-                    Padding(
+                    /*     Padding(
                       padding: const EdgeInsets.all(8.0),
                       child: TextField(
                         //  focusNode: _focus,
@@ -58,22 +67,24 @@ class AddLanguageChip extends ConsumerWidget {
                           //   .filterData(value);
                         },
                       ),
-                    ),
+                    ), */
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: Const.language.length,
+                        itemCount: languagesAvailable.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                               onTap: () {
                                 ref
                                     .read(languageSelectedNotifierProvider
                                         .notifier)
-                                    .addLanguage(
-                                        Const.language.elementAt(index));
+                                    .addLanguage(languagesAvailable[index]);
+                                ref
+                                    .read(wordNotifierProvider.notifier)
+                                    .addTranslation(languagesAvailable[index]);
                                 Navigator.of(context).pop();
                               },
-                              title: Text(Const.language.elementAt(index)));
+                              title: Text(languagesAvailable[index]));
                         },
                       ),
                     )

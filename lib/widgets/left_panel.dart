@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/models/translation_model.dart';
 import 'package:i18n_app/widgets/add_key_dialog.dart';
 
 import '../models/text_cursor_position.dart';
@@ -121,9 +122,11 @@ class LeftPanel extends ConsumerWidget {
                       return [
                         PopupMenuItem(
                           child: const Text("Remove"),
-                          onTap: () => ref
-                              .read(wordItemNotifierProvider.notifier)
-                              .removeWord(list[index].key),
+                          onTap: () {
+                            ref
+                                .read(wordNotifierProvider.notifier)
+                                .removeWord(list[index].key);
+                          },
                         ),
                         PopupMenuItem(
                           child: const Text("Rename"),
@@ -146,14 +149,16 @@ class LeftPanel extends ConsumerWidget {
                           onTap: () {
                             String duplicate = list[index].key;
                             while (ref
-                                .read(wordItemNotifierProvider.notifier)
+                                .read(wordNotifierProvider.notifier)
                                 .checkKeyAlreadyExist(duplicate)) {
                               duplicate += "_copy";
                             }
 
-                            ref.read(wordItemNotifierProvider.notifier).addWord(
-                                  WordItem(
-                                      key: duplicate, translations: const {}),
+                            ref.read(wordNotifierProvider.notifier).addWord(
+                                  WordModel(
+                                    key: duplicate,
+                                    translations: const [],
+                                  ),
                                 );
                           },
                         ),
@@ -162,15 +167,18 @@ class LeftPanel extends ConsumerWidget {
                           onTap: () {
                             String duplicate = list[index].key;
                             while (ref
-                                .read(wordItemNotifierProvider.notifier)
+                                .read(wordNotifierProvider.notifier)
                                 .checkKeyAlreadyExist(duplicate)) {
                               duplicate += "_copy";
                             }
 
-                            ref.read(wordItemNotifierProvider.notifier).addWord(
-                                  WordItem(
-                                      key: duplicate,
-                                      translations: list[index].translations),
+                            print(list[index]);
+
+                            ref.read(wordNotifierProvider.notifier).addWord(
+                                  WordModel(
+                                    key: duplicate,
+                                    translations: list[index].translations,
+                                  ),
                                 );
                           },
                         )

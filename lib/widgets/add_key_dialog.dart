@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/models/translation_model.dart';
 
 import '../models/word_item.dart';
 
 class AddKeyDialog extends ConsumerWidget {
-  final WordItem? wordItemEdit;
+  final WordModel? wordItemEdit;
   final ScrollController scrollController;
   const AddKeyDialog(
       {required this.scrollController, this.wordItemEdit, super.key});
@@ -24,17 +25,19 @@ class AddKeyDialog extends ConsumerWidget {
               if (textEditingController3.text.isEmpty ||
                   textEditingController3.text.contains(" ") ||
                   ref
-                      .read(wordItemNotifierProvider.notifier)
+                      .read(wordNotifierProvider.notifier)
                       .checkKeyAlreadyExist(textEditingController3.text)) {
                 return;
               }
               if (wordItemEdit == null) {
-                ref.read(wordItemNotifierProvider.notifier).addWord(WordItem(
-                    key: textEditingController3.text, translations: const {}));
+                ref.read(wordNotifierProvider.notifier).addWord(WordModel(
+                      key: textEditingController3.text,
+                      translations: const [],
+                    ));
               } else {
-                ref.read(wordItemNotifierProvider.notifier).editWordKey(
+                ref.read(wordNotifierProvider.notifier).editWordKey(
                     wordItemEdit!.key,
-                    WordItem(
+                    WordModel(
                         key: textEditingController3.text,
                         translations: wordItemEdit!.translations));
               }
@@ -64,7 +67,7 @@ class AddKeyDialog extends ConsumerWidget {
             return "Key cannot contain any space";
           }
           if (ref
-              .read(wordItemNotifierProvider.notifier)
+              .read(wordNotifierProvider.notifier)
               .checkKeyAlreadyExist(value)) {
             return "Key already used";
           }
