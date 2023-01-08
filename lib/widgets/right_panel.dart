@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/models/language_selected.dart';
@@ -34,13 +36,31 @@ class RightPanel extends ConsumerWidget {
                         ? ""
                         : selectedWordItem.translations[index].isEqualToDefault
                             ? selectedWordItem.translations[0].value
-                            : selectedWordItem.translations[index].value)
-                  ..selection = TextSelection.collapsed(
+                            : selectedWordItem.translations[index].value);
+                try {
+                  //TODO TRY NOT REQUIRED AND USE .value option to change text and selection
+                  //could resolve the issue
+                  final a = TextSelection.collapsed(
                       offset: _calculateOffset(
                           ref,
                           selectedWordItem.translations.isEmpty
                               ? ""
                               : selectedWordItem.translations[index].value));
+                  languageTextController.value = TextEditingValue(
+                      text: selectedWordItem.translations.isEmpty
+                          ? ""
+                          : selectedWordItem
+                                  .translations[index].isEqualToDefault
+                              ? selectedWordItem.translations[0].value
+                              : selectedWordItem.translations[index].value,
+                      selection: a);
+                } on Exception catch (e) {
+                  log(e.toString());
+                  languageTextController.selection =
+                      const TextSelection.collapsed(
+                    offset: 0,
+                  );
+                }
 
                 return ListTile(
                   trailing: Visibility(
@@ -54,22 +74,17 @@ class RightPanel extends ConsumerWidget {
                                 : selectedWordItem
                                     .translations[index].isEqualToDefault,
                             onChanged: (value) {
-                              if (value) {
-                                ref
-                                    .read(wordNotifierProvider.notifier)
-                                    .editWordTranslation(
-                                        selectedWordItem,
-                                        TranslationModel(
-                                            language: selectedLanguages
-                                                .elementAt(index),
-                                            value: selectedWordItem
-                                                .translations[0].value,
-                                            isEqualToDefault: true));
-                              }
                               ref
                                   .read(wordNotifierProvider.notifier)
-                                  .changeEqualToDefault(selectedWordItem,
-                                      selectedLanguages.elementAt(index));
+                                  .editWordTranslation(
+                                      wordItem: selectedWordItem,
+                                      newTranslation: TranslationModel(
+                                        language:
+                                            selectedLanguages.elementAt(index),
+                                        value: selectedWordItem
+                                            .translations[0].value,
+                                      ),
+                                      isEqualToDefault: value);
                             },
                           ),
                         ),
@@ -86,6 +101,8 @@ class RightPanel extends ConsumerWidget {
                     ),
                   ),
                   title: TextField(
+                    keyboardType: TextInputType.multiline,
+                    maxLines: null,
                     enabled: index == 0
                         ? true
                         : !selectedWordItem
@@ -97,8 +114,8 @@ class RightPanel extends ConsumerWidget {
                       ref
                           .read(wordNotifierProvider.notifier)
                           .editWordTranslation(
-                              selectedWordItem,
-                              TranslationModel(
+                              wordItem: selectedWordItem,
+                              newTranslation: TranslationModel(
                                 language: selectedLanguages.elementAt(index),
                                 value: value,
                               ));

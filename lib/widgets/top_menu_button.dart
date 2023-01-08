@@ -99,13 +99,12 @@ class TopMenuButton extends ConsumerWidget {
               },
             );
           },
-          child: Text("New Project"),
+          child: const Text("New Project"),
         ),
         ElevatedButton(
             onPressed: () async {
               await getApplicationDocumentsDirectory()
                   .then((Directory directory) {
-                print(directory);
                 dir = directory;
                 /*final jsonFile = File("${dir?.path}/$filename");
                   fileExist = jsonFile.existsSync();
@@ -163,7 +162,6 @@ class TopMenuButton extends ConsumerWidget {
             onPressed: () async {
               await getApplicationDocumentsDirectory()
                   .then((Directory directory) {
-                print(directory);
                 dir = directory;
                 /*final jsonFile = File("${dir?.path}/$filename");
                   fileExist = jsonFile.existsSync();
@@ -180,7 +178,7 @@ class TopMenuButton extends ConsumerWidget {
               for (int i = 0; i < j.length; i++) {
                 File file = File("${dir!.path}/${j.elementAt(i)}.json");
 
-                final q = {};
+                final Map<String, dynamic> q = {};
 
                 for (final wordItem in wordItems) {
                   q.putIfAbsent(wordItem.key, () {
@@ -188,7 +186,7 @@ class TopMenuButton extends ConsumerWidget {
                         null) {
                       return "";
                     } */
-                    return wordItem.translations[i];
+                    return wordItem.translations[i].value;
                   });
                 }
 

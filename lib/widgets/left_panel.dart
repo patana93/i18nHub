@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/models/translation_model.dart';
 import 'package:i18n_app/widgets/add_key_dialog.dart';
-
 import '../models/text_cursor_position.dart';
 import '../models/word_item.dart';
 
@@ -171,8 +169,6 @@ class LeftPanel extends ConsumerWidget {
                                 .checkKeyAlreadyExist(duplicate)) {
                               duplicate += "_copy";
                             }
-
-                            print(list[index]);
 
                             ref.read(wordNotifierProvider.notifier).addWord(
                                   WordModel(

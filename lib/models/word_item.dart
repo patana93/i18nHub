@@ -94,7 +94,10 @@ class WordNotifier extends _$WordNotifier {
         .toList();
   }
 
-  editWordTranslation(WordModel wordItem, TranslationModel newTranslation) {
+  editWordTranslation(
+      {required WordModel wordItem,
+      required TranslationModel newTranslation,
+      bool? isEqualToDefault}) {
     final int index =
         state.indexWhere((element) => element.key == wordItem.key);
     state = [
@@ -105,36 +108,14 @@ class WordNotifier extends _$WordNotifier {
               translation.isEqualToDefault)
             newTranslation.copyWith(
                 language: translation.language,
-                isEqualToDefault: translation.isEqualToDefault)
+                value: newTranslation.value,
+                isEqualToDefault:
+                    isEqualToDefault ?? translation.isEqualToDefault)
           else
             translation
       ]),
       ...state.sublist(index + 1),
     ];
-    ref
-        .read(wordItemSelectedNotifierProvider.notifier)
-        .selectWordItem(wordItem.key);
-  }
-
-  changeEqualToDefault(WordModel wordItem, String languageSelected) {
-    final int index =
-        state.indexWhere((element) => element.key == wordItem.key);
-
-    final translateToEdit = wordItem.translations;
-    final languageIndex = translateToEdit
-        .indexWhere((element) => element.language == languageSelected);
-
-    state = [
-      ...state.sublist(0, index),
-      state[index].copyWith(translations: [
-        ...translateToEdit.sublist(0, languageIndex),
-        translateToEdit[languageIndex].copyWith(
-            isEqualToDefault: !translateToEdit[languageIndex].isEqualToDefault),
-        ...translateToEdit.sublist(languageIndex + 1)
-      ]),
-      ...state.sublist(index + 1),
-    ];
-
     ref
         .read(wordItemSelectedNotifierProvider.notifier)
         .selectWordItem(wordItem.key);

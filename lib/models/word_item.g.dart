@@ -29,7 +29,7 @@ class _SystemHash {
   }
 }
 
-String $WordNotifierHash() => r'd8cc0bb88894ee93f4f6898fdca657d92afc1eb8';
+String $WordNotifierHash() => r'd5e1ba33a648c2bda4ad31700444b84d5159ff2f';
 
 /// See also [WordNotifier].
 final wordNotifierProvider =

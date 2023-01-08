@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/models/translation_model.dart';
 
 import '../models/word_item.dart';
 
