@@ -1,34 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/models/language_selected.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 
-import '../models/word_item.dart';
-import '../utils/const.dart';
+import '../../../../utils/const.dart';
+import '../../../manage_language/presentation/controller/manage_language_controller.dart';
+import '../controller/new_project_controller.dart';
 
-class AddLanguageChip extends ConsumerWidget {
-  const AddLanguageChip({super.key});
+class NewProjectButton extends ConsumerWidget {
+  const NewProjectButton({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    return ActionChip(
-      elevation: 8.0,
-      padding: const EdgeInsets.all(2.0),
-      avatar: const Icon(
-        Icons.add,
-        color: Colors.blue,
-        size: 20,
-      ),
-      label: const Text('Add Language'),
-      onPressed: () {
-        final List<String> languagesAvailable = [];
+    return ElevatedButton(
+      onPressed: () async {
+        ref.read(manageWordItemControllerProvider.notifier).clearAll();
 
-        for (final language in Const.language) {
-          if (!ref.read(languageSelectedNotifierProvider).contains(language)) {
-            languagesAvailable.add(language);
-          }
-        }
-
-        showDialog(
+        await showDialog(
+          barrierDismissible: false,
           context: context,
           builder: (context) {
             return Dialog(
@@ -41,10 +29,14 @@ class AddLanguageChip extends ConsumerWidget {
                     const Padding(
                       padding: EdgeInsets.all(8.0),
                       child: Text(
-                        "Add Language",
+                        "Selecte Default Language",
                         style: TextStyle(
                             fontSize: 24, fontWeight: FontWeight.bold),
                       ),
+                    ),
+                    const Text(
+                      "You cannot change this after",
+                      style: TextStyle(fontSize: 16),
                     ),
                     /*     Padding(
                       padding: const EdgeInsets.all(8.0),
@@ -71,20 +63,26 @@ class AddLanguageChip extends ConsumerWidget {
                     Expanded(
                       child: ListView.builder(
                         shrinkWrap: true,
-                        itemCount: languagesAvailable.length,
+                        itemCount: Const.language.length,
                         itemBuilder: (context, index) {
                           return ListTile(
                               onTap: () {
                                 ref
-                                    .read(languageSelectedNotifierProvider
+                                    .read(manageLanguageControllerProvider
                                         .notifier)
-                                    .addLanguage(languagesAvailable[index]);
+                                    .resetToDefault(
+                                        defaultLanguage:
+                                            Const.language.elementAt(index));
                                 ref
-                                    .read(wordNotifierProvider.notifier)
-                                    .addTranslation(languagesAvailable[index]);
+                                    .read(makeNewProjectControllerProvider
+                                        .notifier)
+                                    .makeNewProject(
+                                        selectedLanguage:
+                                            Const.language.elementAt(index));
+
                                 Navigator.of(context).pop();
                               },
-                              title: Text(languagesAvailable[index]));
+                              title: Text(Const.language.elementAt(index)));
                         },
                       ),
                     )
@@ -95,7 +93,7 @@ class AddLanguageChip extends ConsumerWidget {
           },
         );
       },
-      backgroundColor: Colors.grey[200],
+      child: const Text("New Project"),
     );
   }
 }

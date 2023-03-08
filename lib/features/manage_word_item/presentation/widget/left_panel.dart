@@ -1,13 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/widgets/add_key_dialog.dart';
-import '../models/text_cursor_position.dart';
-import '../models/word_item.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/widget/add_key_dialog.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 
 final TextEditingController _textEditingController = TextEditingController();
 
 final FocusNode _focus = FocusNode();
-final ScrollController _scrollController = ScrollController();
+//final ScrollController _scrollController = ScrollController();
 Color _highlightContainerColor = Colors.grey;
 
 class LeftPanel extends ConsumerWidget {
@@ -27,7 +29,8 @@ class LeftPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final list = ref.watch(wordItemFilteredNotifierProvider);
+    final list = ref.watch(manageWordItemControllerProvider);
+    final selectedItem = ref.watch(selectionWorditemControllerProvider)?.key;
 
     return Column(
       children: [
@@ -58,7 +61,7 @@ class LeftPanel extends ConsumerWidget {
                     ),
                     onChanged: (value) {
                       ref
-                          .read(wordItemFilteredNotifierProvider.notifier)
+                          .read(manageWordItemControllerProvider.notifier)
                           .filterData(value);
                     },
                   ),
@@ -70,7 +73,8 @@ class LeftPanel extends ConsumerWidget {
                         context: context,
                         builder: (context) {
                           return AddKeyDialog(
-                            scrollController: _scrollController,
+                            //scrollController: _scrollController,
+                            searchString: _textEditingController.text,
                           );
                         },
                       );
@@ -94,24 +98,19 @@ class LeftPanel extends ConsumerWidget {
                 )),
             child: ListView.separated(
               separatorBuilder: (context, index) => const Divider(height: 0),
-              controller: _scrollController,
+              //controller: _scrollController,
               itemCount: list.length,
               itemBuilder: (context, index) {
                 return ListTile(
-                  selected: (ref.watch(wordItemSelectedNotifierProvider)?.key ??
-                          "") ==
-                      list[index].key,
+                  selected: (selectedItem ?? "") == list[index].key,
                   selectedTileColor: Colors.green,
                   hoverColor: Colors.pink,
                   tileColor: Colors.blue,
                   selectedColor: Colors.amber,
                   onTap: () {
                     ref
-                        .read(wordItemSelectedNotifierProvider.notifier)
-                        .selectWordItem(list[index].key);
-                    ref
-                        .read(textCursorPositionNotifierProvider.notifier)
-                        .setTextCursorPosition(0);
+                        .read(selectionWorditemControllerProvider.notifier)
+                        .selectWordItem(list[index]);
                   },
                   trailing: PopupMenuButton(
                     splashRadius: 24,
@@ -122,8 +121,14 @@ class LeftPanel extends ConsumerWidget {
                           child: const Text("Remove"),
                           onTap: () {
                             ref
-                                .read(wordNotifierProvider.notifier)
-                                .removeWord(list[index].key);
+                                .read(manageWordItemControllerProvider.notifier)
+                                .removeWordItem(
+                                    key: list[index].key,
+                                    searchString: _textEditingController.text);
+                            ref
+                                .read(selectionWorditemControllerProvider
+                                    .notifier)
+                                .selectWordItem(null);
                           },
                         ),
                         PopupMenuItem(
@@ -131,12 +136,14 @@ class LeftPanel extends ConsumerWidget {
                           onTap: () async {
                             await Future.delayed(
                                 const Duration(milliseconds: 200));
+                            // ignore: use_build_context_synchronously
                             await showDialog(
                               context: context,
                               builder: (context) {
                                 return AddKeyDialog(
-                                  scrollController: _scrollController,
+                                  //scrollController: _scrollController,
                                   wordItemEdit: list[index],
+                                  searchString: _textEditingController.text,
                                 );
                               },
                             );
@@ -145,18 +152,30 @@ class LeftPanel extends ConsumerWidget {
                         PopupMenuItem(
                           child: const Text("Duplicate key"),
                           onTap: () {
-                            String duplicate = list[index].key;
-                            while (ref
-                                .read(wordNotifierProvider.notifier)
-                                .checkKeyAlreadyExist(duplicate)) {
-                              duplicate += "_copy";
+                            WordModel duplicate = list[index];
+                            String copyKey = duplicate.key;
+                            Set<TranslationModel> newTranslations = {};
+
+                            for (final newTranslation
+                                in list[index].translations) {
+                              newTranslations.add(newTranslation.copyWith(
+                                  value: "", isEqualToDefault: false));
                             }
 
-                            ref.read(wordNotifierProvider.notifier).addWord(
-                                  WordModel(
-                                    key: duplicate,
-                                    translations: const [],
+                            while (ref
+                                .read(manageWordItemControllerProvider.notifier)
+                                .checkWordItemKeyAlreadyExist(key: copyKey)) {
+                              copyKey += "_copy";
+                            }
+
+                            ref
+                                .read(manageWordItemControllerProvider.notifier)
+                                .addWordItem(
+                                  wordItem: WordModel(
+                                    key: copyKey,
+                                    translations: newTranslations,
                                   ),
+                                  searchString: _textEditingController.text,
                                 );
                           },
                         ),
@@ -165,17 +184,19 @@ class LeftPanel extends ConsumerWidget {
                           onTap: () {
                             String duplicate = list[index].key;
                             while (ref
-                                .read(wordNotifierProvider.notifier)
-                                .checkKeyAlreadyExist(duplicate)) {
+                                .read(manageWordItemControllerProvider.notifier)
+                                .checkWordItemKeyAlreadyExist(key: duplicate)) {
                               duplicate += "_copy";
                             }
 
-                            ref.read(wordNotifierProvider.notifier).addWord(
-                                  WordModel(
-                                    key: duplicate,
-                                    translations: list[index].translations,
-                                  ),
-                                );
+                            ref
+                                .read(manageWordItemControllerProvider.notifier)
+                                .addWordItem(
+                                    wordItem: WordModel(
+                                      key: duplicate,
+                                      translations: list[index].translations,
+                                    ),
+                                    searchString: _textEditingController.text);
                           },
                         )
                       ];

@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'language_selected.dart';
+part of 'text_cursor_position.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,23 +29,21 @@ class _SystemHash {
   }
 }
 
-String $LanguageSelectedNotifierHash() =>
-    r'3af9dfe768a5955bd0d53f544a8d9ebf76ac61db';
+String _$TextCursorPositionNotifierHash() =>
+    r'def6d269808fb1b2cfd90dc13c68fc4b20090475';
 
-/// See also [LanguageSelectedNotifier].
-final languageSelectedNotifierProvider =
-    AutoDisposeNotifierProvider<LanguageSelectedNotifier, Set<String>>(
-  LanguageSelectedNotifier.new,
-  name: r'languageSelectedNotifierProvider',
+/// See also [TextCursorPositionNotifier].
+final textCursorPositionNotifierProvider =
+    AutoDisposeNotifierProvider<TextCursorPositionNotifier, int>(
+  TextCursorPositionNotifier.new,
+  name: r'textCursorPositionNotifierProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : $LanguageSelectedNotifierHash,
+      : _$TextCursorPositionNotifierHash,
 );
-typedef LanguageSelectedNotifierRef
-    = AutoDisposeNotifierProviderRef<Set<String>>;
+typedef TextCursorPositionNotifierRef = AutoDisposeNotifierProviderRef<int>;
 
-abstract class _$LanguageSelectedNotifier
-    extends AutoDisposeNotifier<Set<String>> {
+abstract class _$TextCursorPositionNotifier extends AutoDisposeNotifier<int> {
   @override
-  Set<String> build();
+  int build();
 }

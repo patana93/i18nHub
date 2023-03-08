@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/models/language_selected.dart';
-import 'package:i18n_app/widgets/default_language_chip.dart';
-import 'package:i18n_app/widgets/language_chip.dart';
+import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_app/features/manage_language/presentation/widget/default_language_chip.dart';
+import 'package:i18n_app/features/manage_language/presentation/widget/language_chip.dart';
 
-class LanguageSelectedList extends ConsumerWidget {
-  const LanguageSelectedList({super.key});
+class LanguageSelectedChipList extends ConsumerWidget {
+  const LanguageSelectedChipList({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -15,18 +15,18 @@ class LanguageSelectedList extends ConsumerWidget {
       child: ListView.builder(
         controller: languageScrollController,
         scrollDirection: Axis.horizontal,
-        itemCount: ref.watch(languageSelectedNotifierProvider).length,
+        itemCount: ref.watch(manageLanguageControllerProvider).length,
         itemBuilder: (context, index) {
           return Padding(
             padding: const EdgeInsets.symmetric(horizontal: 2.0),
             child: index == 0
                 ? DefaultLanguageChip(
                     title: ref
-                        .read(languageSelectedNotifierProvider)
+                        .read(manageLanguageControllerProvider)
                         .elementAt(index))
                 : LanguageChip(
                     title: ref
-                        .read(languageSelectedNotifierProvider)
+                        .read(manageLanguageControllerProvider)
                         .elementAt(index)),
           );
         },

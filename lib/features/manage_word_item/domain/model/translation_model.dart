@@ -1,7 +1,8 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 @immutable
-class TranslationModel {
+class TranslationModel extends Equatable {
   final String language;
   final String value;
   final bool isEqualToDefault;
@@ -36,4 +37,7 @@ class TranslationModel {
   String toString() {
     return "$language($isEqualToDefault) -> $value";
   }
+
+  @override
+  List<Object?> get props => [language, value, isEqualToDefault];
 }
