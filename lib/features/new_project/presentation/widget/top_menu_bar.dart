@@ -1,5 +1,16 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:path_provider/path_provider.dart';
+
+import '../../../../utils/const.dart';
+import '../../../manage_language/presentation/controller/manage_language_controller.dart';
+import '../controller/new_project_controller.dart';
 
 class MenuEntry {
   const MenuEntry(
@@ -48,11 +59,11 @@ class MenuEntry {
   }
 }
 
-class TopMenuBar extends StatelessWidget {
+class TopMenuBar extends ConsumerWidget {
   const TopMenuBar({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Row(
@@ -60,7 +71,7 @@ class TopMenuBar extends StatelessWidget {
           children: [
             Expanded(
               child: MenuBar(
-                children: MenuEntry.build(_getMenus()),
+                children: MenuEntry.build(_getMenus(context, ref)),
               ),
             ),
           ],
@@ -69,104 +80,128 @@ class TopMenuBar extends StatelessWidget {
     );
   }
 
-  List<MenuEntry> _getMenus() {
+  List<MenuEntry> _getMenus(BuildContext context, WidgetRef ref) {
     final List<MenuEntry> result = <MenuEntry>[
       MenuEntry(
-        label: 'Menu Demo',
+        label: 'File',
         menuChildren: <MenuEntry>[
           MenuEntry(
-            label: 'About',
-            onPressed: () {},
+            label: 'New Project',
+            onPressed: () {
+              showDialog(
+                context: context,
+                builder: (context) {
+                  return Dialog(
+                    child: ConstrainedBox(
+                      constraints: BoxConstraints(
+                          minWidth: 300,
+                          maxWidth:
+                              MediaQuery.of(context).size.width / 4 + 300),
+                      child: Column(
+                        children: [
+                          const Padding(
+                            padding: EdgeInsets.all(8.0),
+                            child: Text(
+                              "Selecte Default Language",
+                              style: TextStyle(
+                                  fontSize: 24, fontWeight: FontWeight.bold),
+                            ),
+                          ),
+                          const Text(
+                            "You cannot change this after",
+                            style: TextStyle(fontSize: 16),
+                          ),
+                          /*     Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: TextField(
+                        //  focusNode: _focus,
+                        //  controller: _textEditingController,
+                        decoration: const InputDecoration(
+                          hintText: 'Search',
+                          hintStyle: TextStyle(
+                            fontSize: 18,
+                            fontStyle: FontStyle.italic,
+                          ),
+                          border: OutlineInputBorder(
+                              borderRadius:
+                                  BorderRadius.all(Radius.circular(12))),
+                        ),
+                        onChanged: (value) {
+                          // ref
+                          //     .read(wordItemFilteredNotifierProvider.notifier)
+                          //   .filterData(value);
+                        },
+                      ),
+                    ), */
+                          Expanded(
+                            child: ListView.builder(
+                              shrinkWrap: true,
+                              itemCount: Const.language.length,
+                              itemBuilder: (context, index) {
+                                return ListTile(
+                                    onTap: () {
+                                      ref
+                                          .read(
+                                              selectionWorditemControllerProvider
+                                                  .notifier)
+                                          .selectWordItem(null);
+                                      ref
+                                          .read(manageLanguageControllerProvider
+                                              .notifier)
+                                          .resetToDefault(
+                                              defaultLanguage: Const.language
+                                                  .elementAt(index));
+                                      ref
+                                          .read(makeNewProjectControllerProvider
+                                              .notifier)
+                                          .makeNewProject(
+                                              selectedLanguage: Const.language
+                                                  .elementAt(index));
+
+                                      Navigator.of(context).pop();
+                                    },
+                                    title:
+                                        Text(Const.language.elementAt(index)));
+                              },
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
+                  );
+                },
+              );
+            },
           ),
           MenuEntry(
-            label: 'Hide Message',
-            onPressed: () {},
-            shortcut:
-                const SingleActivator(LogicalKeyboardKey.keyS, control: true),
-          ),
-          // Hides the message, but is only enabled if the message isn't
-          // already hidden.
-          const MenuEntry(
-            label: 'Reset Message',
-            onPressed: null,
-            shortcut: SingleActivator(LogicalKeyboardKey.escape),
-          ),
-          MenuEntry(
-            label: 'Background Color',
-            menuChildren: <MenuEntry>[
-              MenuEntry(
-                label: 'Red Background',
-                onPressed: () {},
-                shortcut: const SingleActivator(LogicalKeyboardKey.keyR,
-                    control: true),
-              ),
-              MenuEntry(
-                label: 'Green Background',
-                onPressed: () {},
-                shortcut: const SingleActivator(LogicalKeyboardKey.keyG,
-                    control: true),
-              ),
-              MenuEntry(
-                label: 'Blue Background',
-                onPressed: () {},
-                shortcut: const SingleActivator(LogicalKeyboardKey.keyB,
-                    control: true),
-              ),
-            ],
-          ),
+            label: 'Save',
+            onPressed: () async {
+              Directory? dir;
+              String filename = "Myjson.json";
+              await getApplicationDocumentsDirectory()
+                  .then((Directory directory) {
+                dir = directory;
+
+                print(dir);
+                /*final jsonFile = File("${dir?.path}/$filename");
+                    fileExist = jsonFile.existsSync();
+                  print(fileExist);
+                  if (fileExist) {
+                    print("Exist");
+                    fileContent = jsonDecode(jsonFile.readAsStringSync()); 
+                  } */
+                final wordItems = ref.watch(manageWordItemControllerProvider);
+
+                File file = File("${dir!.path}/$filename");
+                file.createSync();
+                file.writeAsStringSync(jsonEncode(wordItems.first.toJson()));
+                /*final wordItems = ref.watch(wordItemNotifierProvider); */
+              });
+            },
+          )
         ],
-      ),
-      MenuEntry(
-        label: 'Menu Demo',
-        menuChildren: <MenuEntry>[
-          MenuEntry(
-            label: 'About',
-            onPressed: () {},
-          ),
-          MenuEntry(
-            label: 'Hide Message',
-            onPressed: () {},
-            shortcut:
-                const SingleActivator(LogicalKeyboardKey.keyS, control: true),
-          ),
-          // Hides the message, but is only enabled if the message isn't
-          // already hidden.
-          const MenuEntry(
-            label: 'Reset Message',
-            onPressed: null,
-            shortcut: SingleActivator(LogicalKeyboardKey.escape),
-          ),
-          MenuEntry(
-            label: 'Background Color',
-            menuChildren: <MenuEntry>[
-              MenuEntry(
-                label: 'Red Background',
-                onPressed: () {},
-                shortcut: const SingleActivator(LogicalKeyboardKey.keyR,
-                    control: true),
-              ),
-              MenuEntry(
-                label: 'Green Background',
-                onPressed: () {},
-                shortcut: const SingleActivator(LogicalKeyboardKey.keyG,
-                    control: true),
-              ),
-              MenuEntry(
-                label: 'Blue Background',
-                onPressed: () {},
-                shortcut: const SingleActivator(LogicalKeyboardKey.keyB,
-                    control: true),
-              ),
-            ],
-          ),
-        ],
-      ),
+      )
     ];
-    // (Re-)register the shortcuts with the ShortcutRegistry so that they are
-    // available to the entire application, and update them if they've changed.
-    //_shortcutsEntry?.dispose();
-    //_shortcutsEntry =
-    //    ShortcutRegistry.of(context).addAll(MenuEntry.shortcuts(result));
     return result;
   }
 }

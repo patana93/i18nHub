@@ -1,7 +1,9 @@
 import 'package:equatable/equatable.dart';
-import 'package:flutter/material.dart';
+import 'package:json_annotation/json_annotation.dart';
 
-@immutable
+part 'translation_model.g.dart';
+
+@JsonSerializable()
 class TranslationModel extends Equatable {
   final String language;
   final String value;
@@ -13,16 +15,11 @@ class TranslationModel extends Equatable {
     this.isEqualToDefault = false,
   });
 
-  TranslationModel.fromJson(Map<String, dynamic> json)
-      : language = json['language'],
-        value = json['value'],
-        isEqualToDefault = json["isEqualToDefault"];
+  //Json Serializable
+  factory TranslationModel.fromJson(Map<String, dynamic> json) =>
+      _$TranslationModelFromJson(json);
 
-  Map<String, dynamic> toJson() => {
-        'language': language,
-        'value': value,
-        'isEqualToDefault': isEqualToDefault,
-      };
+  Map<String, dynamic> toJson() => _$TranslationModelToJson(this);
 
   TranslationModel copyWith(
       {String? language, String? value, bool? isEqualToDefault}) {
