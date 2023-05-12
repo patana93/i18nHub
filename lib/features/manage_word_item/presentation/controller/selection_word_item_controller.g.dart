@@ -29,22 +29,22 @@ class _SystemHash {
   }
 }
 
-String _$SelectionWorditemControllerHash() =>
-    r'056c307c1fcfd2d105149ffd9c8909de8f2758b6';
+String _$SelectionWordItemControllerHash() =>
+    r'323490188261c46c72d581192c7ddb4a9d9fa46f';
 
-/// See also [SelectionWorditemController].
-final selectionWorditemControllerProvider =
-    AutoDisposeNotifierProvider<SelectionWorditemController, WordModel?>(
-  SelectionWorditemController.new,
-  name: r'selectionWorditemControllerProvider',
+/// See also [SelectionWordItemController].
+final selectionWordItemControllerProvider =
+    AutoDisposeNotifierProvider<SelectionWordItemController, WordModel?>(
+  SelectionWordItemController.new,
+  name: r'selectionWordItemControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$SelectionWorditemControllerHash,
+      : _$SelectionWordItemControllerHash,
 );
-typedef SelectionWorditemControllerRef
+typedef SelectionWordItemControllerRef
     = AutoDisposeNotifierProviderRef<WordModel?>;
 
-abstract class _$SelectionWorditemController
+abstract class _$SelectionWordItemController
     extends AutoDisposeNotifier<WordModel?> {
   @override
   WordModel? build();

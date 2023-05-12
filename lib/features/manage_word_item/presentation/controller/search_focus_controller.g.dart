@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'manage_word_item_controller.dart';
+part of 'search_focus_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
@@ -29,23 +29,21 @@ class _SystemHash {
   }
 }
 
-String _$ManageWordItemControllerHash() =>
-    r'b01d621abd6f760c7bb3c4cf94549220d93eeec9';
+String _$SearchFocusControllerHash() =>
+    r'132c3baeb4a01ddd5150ab22983e29f0fa3783dd';
 
-/// See also [ManageWordItemController].
-final manageWordItemControllerProvider =
-    AutoDisposeNotifierProvider<ManageWordItemController, List<WordModel>>(
-  ManageWordItemController.new,
-  name: r'manageWordItemControllerProvider',
+/// See also [SearchFocusController].
+final searchFocusControllerProvider =
+    AutoDisposeNotifierProvider<SearchFocusController, bool>(
+  SearchFocusController.new,
+  name: r'searchFocusControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$ManageWordItemControllerHash,
+      : _$SearchFocusControllerHash,
 );
-typedef ManageWordItemControllerRef
-    = AutoDisposeNotifierProviderRef<List<WordModel>>;
+typedef SearchFocusControllerRef = AutoDisposeNotifierProviderRef<bool>;
 
-abstract class _$ManageWordItemController
-    extends AutoDisposeNotifier<List<WordModel>> {
+abstract class _$SearchFocusController extends AutoDisposeNotifier<bool> {
   @override
-  List<WordModel> build();
+  bool build();
 }

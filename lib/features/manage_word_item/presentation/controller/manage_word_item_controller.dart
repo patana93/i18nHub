@@ -25,7 +25,7 @@ class ManageWordItemController extends _$ManageWordItemController {
     _manageWordItemRepo.addWordItem(wordItem: wordItem);
     state = [..._manageWordItemRepo.filterData(searchString ?? "")];
     ref
-        .read(selectionWorditemControllerProvider.notifier)
+        .read(selectionWordItemControllerProvider.notifier)
         .selectWordItem(wordItem);
   }
 
@@ -42,7 +42,7 @@ class ManageWordItemController extends _$ManageWordItemController {
         oldKey: oldKey, newWordItem: newWordItem);
     state = [..._manageWordItemRepo.filterData(searchString ?? "")];
     ref
-        .read(selectionWorditemControllerProvider.notifier)
+        .read(selectionWordItemControllerProvider.notifier)
         .selectWordItem(newWordItem);
   }
 
@@ -53,10 +53,10 @@ class ManageWordItemController extends _$ManageWordItemController {
       {required String newLanguage, String? searchString}) {
     _manageWordItemRepo.addTranslationLanguages(newLanguage);
     state = [..._manageWordItemRepo.filterData(searchString ?? "")];
-    final selectedWordItem = ref.read(selectionWorditemControllerProvider);
+    final selectedWordItem = ref.read(selectionWordItemControllerProvider);
 
     ref
-        .read(selectionWorditemControllerProvider.notifier)
+        .read(selectionWordItemControllerProvider.notifier)
         .selectWordItem(getWordItem(selectedWordItem?.key ?? ""));
   }
 
@@ -79,7 +79,7 @@ class ManageWordItemController extends _$ManageWordItemController {
 
     state = [..._manageWordItemRepo.getAllWordItems()];
     ref
-        .read(selectionWorditemControllerProvider.notifier)
+        .read(selectionWordItemControllerProvider.notifier)
         .selectWordItem(getWordItem(key));
   }
 

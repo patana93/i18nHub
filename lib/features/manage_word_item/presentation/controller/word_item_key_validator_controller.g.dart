@@ -30,7 +30,7 @@ class _SystemHash {
 }
 
 String _$ValidateKeyControllerHash() =>
-    r'72b2bceb681273b5674e4ff9f30e8241ff9eb83d';
+    r'd7b4e791694e5e095e587176a5c1ed2919be763c';
 
 /// See also [ValidateKeyController].
 final validateKeyControllerProvider =

@@ -21,49 +21,7 @@ class TopMenuButton extends ConsumerWidget {
       child: Row(
         mainAxisAlignment: MainAxisAlignment.end,
         children: [
-          ElevatedButton(
-              onPressed: () async {
-                await getApplicationDocumentsDirectory()
-                    .then((Directory directory) {
-                  dir = directory;
-                  final jsonFile = File("${dir?.path}/$filename");
-                  //fileExist = jsonFile.existsSync();
-                  //if (fileExist) {
-                  final List<dynamic> fileContent =
-                      jsonDecode(jsonFile.readAsStringSync());
-                  final List<WordModel> wordItemList = [];
-                  for (final item in fileContent) {
-                    wordItemList.add(WordModel.fromJson(item));
-                  }
-
-                  ref
-                      .read(manageWordItemControllerProvider.notifier)
-                      .clearAll();
-                  for (final word in wordItemList) {
-                    ref
-                        .read(manageWordItemControllerProvider.notifier)
-                        .addWordItem(wordItem: word);
-                  }
-
-                  final languages = ref
-                      .read(manageWordItemControllerProvider)
-                      .map((e) => e.translations)
-                      .expand((element) => element)
-                      .toList();
-
-                  ref.read(manageLanguageControllerProvider.notifier).clear();
-
-                  for (final lan in languages) {
-                    ref
-                        .read(manageLanguageControllerProvider.notifier)
-                        .addLanguage(selectedLanguage: lan.language);
-                  }
-
-                  //}
-                  //final wordList = jsonDecode(jsonFile.readAsStringSync());
-                });
-              },
-              child: const Text("Load")),
+          ElevatedButton(onPressed: () async {}, child: const Text("Load")),
           const Spacer(),
           ElevatedButton(
               onPressed: () async {

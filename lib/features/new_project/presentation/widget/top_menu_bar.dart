@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -142,7 +143,7 @@ class TopMenuBar extends ConsumerWidget {
                                     onTap: () {
                                       ref
                                           .read(
-                                              selectionWorditemControllerProvider
+                                              selectionWordItemControllerProvider
                                                   .notifier)
                                           .selectWordItem(null);
                                       ref
@@ -196,6 +197,61 @@ class TopMenuBar extends ConsumerWidget {
                 file.createSync();
                 file.writeAsStringSync(jsonEncode(wordItems.first.toJson()));
                 /*final wordItems = ref.watch(wordItemNotifierProvider); */
+              });
+            },
+          ),
+          MenuEntry(
+            label: "Load",
+            onPressed: () async {
+              FilePickerResult? result = await FilePicker.platform.pickFiles(
+                  lockParentWindow: true,
+                  type: FileType.custom,
+                  allowedExtensions: ["json"]);
+
+              if (result != null) {
+                List<File> files =
+                    result.paths.map((path) => File(path ?? "")).toList();
+                print(files);
+              } else {
+                // User canceled the picker
+              }
+
+              await getApplicationDocumentsDirectory()
+                  .then((Directory directory) {
+                //dir = directory;
+                // final jsonFile = File("${dir?.path}/$filename");
+                //fileExist = jsonFile.existsSync();
+                //if (fileExist) {
+                //  final List<dynamic> fileContent =
+                //     jsonDecode(jsonFile.readAsStringSync());
+                //final List<WordModel> wordItemList = [];
+                // for (final item in fileContent) {
+                //   wordItemList.add(WordModel.fromJson(item));
+                // }
+
+                // ref.read(manageWordItemControllerProvider.notifier).clearAll();
+                // for (final word in wordItemList) {
+                //   ref
+                //       .read(manageWordItemControllerProvider.notifier)
+                //       .addWordItem(wordItem: word);
+                // }
+
+                // final languages = ref
+                //     .read(manageWordItemControllerProvider)
+                //     .map((e) => e.translations)
+                //     .expand((element) => element)
+                //     .toList();
+
+                // ref.read(manageLanguageControllerProvider.notifier).clear();
+
+                // for (final lan in languages) {
+                //   ref
+                //       .read(manageLanguageControllerProvider.notifier)
+                //       .addLanguage(selectedLanguage: lan.language);
+                // }
+
+                //}
+                //final wordList = jsonDecode(jsonFile.readAsStringSync());
               });
             },
           )

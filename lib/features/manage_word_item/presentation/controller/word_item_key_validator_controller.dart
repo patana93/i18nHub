@@ -7,21 +7,24 @@ part 'word_item_key_validator_controller.g.dart';
 class ValidateKeyController extends _$ValidateKeyController {
   @override
   String? build() {
-    return null;
+    return "";
   }
 
-  String? validate(String? value) {
+  validate(String? value) {
     if (value == null || value.isEmpty) {
-      return "Enter a valid key";
+      state = "Enter a valid key";
+      return;
     }
     if (value.contains(" ")) {
-      return "Key cannot contain any space";
+      state = "Key cannot contain any space";
+      return;
     }
     if (ref
         .read(manageWordItemControllerProvider.notifier)
         .checkWordItemKeyAlreadyExist(key: value)) {
-      return "Key already used";
+      state = "Key already used";
+      return;
     }
-    return null;
+    state = null;
   }
 }

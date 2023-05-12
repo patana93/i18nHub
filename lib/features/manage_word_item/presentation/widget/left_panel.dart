@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/search_focus_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/widget/add_key_dialog.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
@@ -9,38 +10,29 @@ import 'package:i18n_app/features/manage_word_item/presentation/controller/selec
 final TextEditingController _textEditingController = TextEditingController();
 
 final FocusNode _focus = FocusNode();
-//final ScrollController _scrollController = ScrollController();
-Color _highlightContainerColor = Colors.grey;
 
+//final ScrollController _scrollController = ScrollController();
 class LeftPanel extends ConsumerWidget {
   const LeftPanel({super.key});
-
-  void _onFocusChange(StateSetter containerState) {
-    containerState(
-      () {
-        if (_focus.hasFocus) {
-          _highlightContainerColor = Colors.blue;
-        } else {
-          _highlightContainerColor = Colors.grey;
-        }
-      },
-    );
-  }
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final list = ref.watch(manageWordItemControllerProvider);
-    final selectedItem = ref.watch(selectionWorditemControllerProvider)?.key;
+    final selectedItem = ref.watch(selectionWordItemControllerProvider)?.key;
 
     return Column(
       children: [
-        StatefulBuilder(builder: (context, containerState) {
-          _focus.addListener(() => _onFocusChange(containerState));
-          return Container(
+        Focus(
+          onFocusChange: (isFocus) => ref
+              .read(searchFocusControllerProvider.notifier)
+              .setFocusColor(isFocus),
+          child: Container(
             decoration: BoxDecoration(
               borderRadius: const BorderRadius.only(
                   topLeft: Radius.circular(8), topRight: Radius.circular(8)),
-              border: Border.all(color: _highlightContainerColor),
+              border: ref.watch(searchFocusControllerProvider)
+                  ? Border.all(color: Colors.blue, width: 2)
+                  : Border.all(color: Colors.grey, width: 1),
             ),
             child: Row(
               children: [
@@ -81,8 +73,8 @@ class LeftPanel extends ConsumerWidget {
                     }),
               ],
             ),
-          );
-        }),
+          ),
+        ),
         Expanded(
           flex: 90,
           child: Container(
@@ -109,7 +101,7 @@ class LeftPanel extends ConsumerWidget {
                   selectedColor: Colors.amber,
                   onTap: () {
                     ref
-                        .read(selectionWorditemControllerProvider.notifier)
+                        .read(selectionWordItemControllerProvider.notifier)
                         .selectWordItem(list[index]);
                   },
                   trailing: PopupMenuButton(
@@ -126,7 +118,7 @@ class LeftPanel extends ConsumerWidget {
                                     key: list[index].key,
                                     searchString: _textEditingController.text);
                             ref
-                                .read(selectionWorditemControllerProvider
+                                .read(selectionWordItemControllerProvider
                                     .notifier)
                                 .selectWordItem(null);
                           },

@@ -6,7 +6,7 @@ import '../../domain/model/word_model.dart';
 part 'selection_word_item_controller.g.dart';
 
 @riverpod
-class SelectionWorditemController extends _$SelectionWorditemController {
+class SelectionWordItemController extends _$SelectionWordItemController {
   @override
   WordModel? build() {
     return null;

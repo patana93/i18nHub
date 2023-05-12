@@ -12,7 +12,7 @@ class RightPanel extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedLanguages = ref.watch(manageLanguageControllerProvider);
-    final selectedItem = ref.watch(selectionWorditemControllerProvider);
+    final selectedItem = ref.watch(selectionWordItemControllerProvider);
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.withAlpha(28),
