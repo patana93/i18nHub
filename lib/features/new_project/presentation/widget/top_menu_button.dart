@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -14,7 +13,6 @@ class TopMenuButton extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     Directory? dir;
-    String filename = "Myjson.json";
 
     return Align(
       alignment: Alignment.centerRight,

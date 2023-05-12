@@ -3,8 +3,8 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 import 'package:path_provider/path_provider.dart';
@@ -195,7 +195,7 @@ class TopMenuBar extends ConsumerWidget {
 
                 File file = File("${dir!.path}/$filename");
                 file.createSync();
-                file.writeAsStringSync(jsonEncode(wordItems.first.toJson()));
+                file.writeAsStringSync(jsonEncode(wordItems));
                 /*final wordItems = ref.watch(wordItemNotifierProvider); */
               });
             },
@@ -207,51 +207,50 @@ class TopMenuBar extends ConsumerWidget {
                   lockParentWindow: true,
                   type: FileType.custom,
                   allowedExtensions: ["json"]);
-
+              List<File>? files;
               if (result != null) {
-                List<File> files =
-                    result.paths.map((path) => File(path ?? "")).toList();
-                print(files);
+                files = result.paths.map((path) => File(path ?? "")).toList();
               } else {
                 // User canceled the picker
               }
 
               await getApplicationDocumentsDirectory()
                   .then((Directory directory) {
-                //dir = directory;
-                // final jsonFile = File("${dir?.path}/$filename");
-                //fileExist = jsonFile.existsSync();
-                //if (fileExist) {
-                //  final List<dynamic> fileContent =
-                //     jsonDecode(jsonFile.readAsStringSync());
-                //final List<WordModel> wordItemList = [];
-                // for (final item in fileContent) {
-                //   wordItemList.add(WordModel.fromJson(item));
-                // }
+                final jsonFile = File(
+                    "${directory.path}${files?.first.path.substring(files.first.path.lastIndexOf("\\"))}");
+                final fileExist = jsonFile.existsSync();
+                if (fileExist) {
+                  final List<dynamic> fileContent =
+                      jsonDecode(jsonFile.readAsStringSync());
+                  final List<WordModel> wordItemList = [];
+                  for (var item in fileContent) {
+                    wordItemList.add(WordModel.fromJson(item));
+                  }
 
-                // ref.read(manageWordItemControllerProvider.notifier).clearAll();
-                // for (final word in wordItemList) {
-                //   ref
-                //       .read(manageWordItemControllerProvider.notifier)
-                //       .addWordItem(wordItem: word);
-                // }
+                  ref
+                      .read(manageWordItemControllerProvider.notifier)
+                      .clearAll();
+                  for (final word in wordItemList) {
+                    ref
+                        .read(manageWordItemControllerProvider.notifier)
+                        .addWordItem(wordItem: word);
+                  }
 
-                // final languages = ref
-                //     .read(manageWordItemControllerProvider)
-                //     .map((e) => e.translations)
-                //     .expand((element) => element)
-                //     .toList();
+                  final languages = ref
+                      .read(manageWordItemControllerProvider)
+                      .map((e) => e.translations)
+                      .expand((element) => element)
+                      .toList();
 
-                // ref.read(manageLanguageControllerProvider.notifier).clear();
+                  ref.read(manageLanguageControllerProvider.notifier).clear();
 
-                // for (final lan in languages) {
-                //   ref
-                //       .read(manageLanguageControllerProvider.notifier)
-                //       .addLanguage(selectedLanguage: lan.language);
-                // }
-
-                //}
-                //final wordList = jsonDecode(jsonFile.readAsStringSync());
+                  for (final lan in languages) {
+                    ref
+                        .read(manageLanguageControllerProvider.notifier)
+                        .addLanguage(selectedLanguage: lan.language);
+                  }
+                }
+                final wordList = jsonDecode(jsonFile.readAsStringSync());
               });
             },
           )
