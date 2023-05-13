@@ -15,8 +15,16 @@ class ValidateKeyController extends _$ValidateKeyController {
       state = "Enter a valid key";
       return;
     }
-    if (value.contains(" ")) {
-      state = "Key cannot contain any space";
+    if (value.startsWith(RegExp(r'[1-9]'))) {
+      state = "Key cannot start with a number";
+      return;
+    }
+    if (value.startsWith("_")) {
+      state = "Key cannot start with an underscore";
+      return;
+    }
+    if (value.contains(RegExp(r'[^\w-]'))) {
+      state = "Key cannot contain special characters or space";
       return;
     }
     if (ref
