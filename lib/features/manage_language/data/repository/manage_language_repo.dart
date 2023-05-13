@@ -1,6 +1,7 @@
 import 'package:i18n_app/utils/const.dart';
 
 class ManageLanguageRepo {
+  //final Set<String> languages = {"English", "French", "Italian", "Spanish"};
   final Set<String> languages = {};
 
   Set<String> getAllLanguageSelected() {

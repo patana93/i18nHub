@@ -183,20 +183,37 @@ class TopMenuBar extends ConsumerWidget {
                   .then((Directory directory) {
                 dir = directory;
 
-                print(dir);
-                /*final jsonFile = File("${dir?.path}/$filename");
-                    fileExist = jsonFile.existsSync();
-                  print(fileExist);
-                  if (fileExist) {
-                    print("Exist");
-                    fileContent = jsonDecode(jsonFile.readAsStringSync()); 
-                  } */
                 final wordItems = ref.watch(manageWordItemControllerProvider);
 
                 File file = File("${dir!.path}/$filename");
                 file.createSync();
                 file.writeAsStringSync(jsonEncode(wordItems));
-                /*final wordItems = ref.watch(wordItemNotifierProvider); */
+              });
+            },
+          ),
+          MenuEntry(
+            label: 'Save as Json',
+            onPressed: () async {
+              Directory? dir;
+              await getApplicationDocumentsDirectory()
+                  .then((Directory directory) {
+                dir = directory;
+
+                final wordItems = ref.watch(manageWordItemControllerProvider);
+                final langs = ref.watch(manageLanguageControllerProvider);
+
+                final Map<String, String> result = {};
+
+                for (var language in langs) {
+                  for (var wordItem in wordItems) {
+                    final transitionModel = wordItem.translations
+                        .firstWhere((element) => element.language == language);
+                    result[wordItem.key] = transitionModel.value;
+                  }
+                  File file = File("${dir!.path}/$language.json");
+                  file.createSync();
+                  file.writeAsStringSync(jsonEncode(result));
+                }
               });
             },
           ),
@@ -214,44 +231,44 @@ class TopMenuBar extends ConsumerWidget {
                 // User canceled the picker
               }
 
-              await getApplicationDocumentsDirectory()
-                  .then((Directory directory) {
-                final jsonFile = File(
-                    "${directory.path}${files?.first.path.substring(files.first.path.lastIndexOf("\\"))}");
-                final fileExist = jsonFile.existsSync();
-                if (fileExist) {
-                  final List<dynamic> fileContent =
-                      jsonDecode(jsonFile.readAsStringSync());
-                  final List<WordModel> wordItemList = [];
-                  for (var item in fileContent) {
-                    wordItemList.add(WordModel.fromJson(item));
-                  }
+              await getApplicationDocumentsDirectory().then(
+                (Directory directory) {
+                  final jsonFile = File(
+                      "${directory.path}${files?.first.path.substring(files.first.path.lastIndexOf("\\"))}");
+                  final fileExist = jsonFile.existsSync();
+                  if (fileExist) {
+                    final List<dynamic> fileContent =
+                        jsonDecode(jsonFile.readAsStringSync());
+                    final List<WordModel> wordItemList = [];
+                    for (var item in fileContent) {
+                      wordItemList.add(WordModel.fromJson(item));
+                    }
 
-                  ref
-                      .read(manageWordItemControllerProvider.notifier)
-                      .clearAll();
-                  for (final word in wordItemList) {
                     ref
                         .read(manageWordItemControllerProvider.notifier)
-                        .addWordItem(wordItem: word);
+                        .clearAll();
+                    for (final word in wordItemList) {
+                      ref
+                          .read(manageWordItemControllerProvider.notifier)
+                          .addWordItem(wordItem: word);
+                    }
+
+                    final languages = ref
+                        .read(manageWordItemControllerProvider)
+                        .map((e) => e.translations)
+                        .expand((element) => element)
+                        .toList();
+
+                    ref.read(manageLanguageControllerProvider.notifier).clear();
+
+                    for (final lan in languages) {
+                      ref
+                          .read(manageLanguageControllerProvider.notifier)
+                          .addLanguage(selectedLanguage: lan.language);
+                    }
                   }
-
-                  final languages = ref
-                      .read(manageWordItemControllerProvider)
-                      .map((e) => e.translations)
-                      .expand((element) => element)
-                      .toList();
-
-                  ref.read(manageLanguageControllerProvider.notifier).clear();
-
-                  for (final lan in languages) {
-                    ref
-                        .read(manageLanguageControllerProvider.notifier)
-                        .addLanguage(selectedLanguage: lan.language);
-                  }
-                }
-                final wordList = jsonDecode(jsonFile.readAsStringSync());
-              });
+                },
+              );
             },
           )
         ],

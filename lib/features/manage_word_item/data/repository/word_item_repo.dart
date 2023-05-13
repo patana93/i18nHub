@@ -3,6 +3,14 @@ import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart'
 import 'package:collection/collection.dart';
 
 class ManageWordItemRepo {
+  //final List<WordModel> wordItems = List.generate(
+  //    5500,
+  //    (index) => WordModel(key: index.toString(), translations: {
+  //          TranslationModel(language: "English", value: index.toString()),
+  //          TranslationModel(language: "French", value: index.toString()),
+  //          TranslationModel(language: "Italian", value: index.toString()),
+  //          TranslationModel(language: "Spanish", value: index.toString())
+  //        }));
   final List<WordModel> wordItems = [];
 
   List<WordModel> getAllWordItems() => wordItems;
