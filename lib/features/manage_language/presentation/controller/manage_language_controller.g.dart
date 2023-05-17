@@ -30,11 +30,11 @@ class _SystemHash {
 }
 
 String _$ManageLanguageControllerHash() =>
-    r'b6cd7ae61980669770675f97fbe2f648984360d5';
+    r'f12298da97ec804ba3c4a74758456c7d3b7e2a28';
 
 /// See also [ManageLanguageController].
 final manageLanguageControllerProvider =
-    AutoDisposeNotifierProvider<ManageLanguageController, Set<String>>(
+    AutoDisposeNotifierProvider<ManageLanguageController, Map<String, String>>(
   ManageLanguageController.new,
   name: r'manageLanguageControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -42,10 +42,10 @@ final manageLanguageControllerProvider =
       : _$ManageLanguageControllerHash,
 );
 typedef ManageLanguageControllerRef
-    = AutoDisposeNotifierProviderRef<Set<String>>;
+    = AutoDisposeNotifierProviderRef<Map<String, String>>;
 
 abstract class _$ManageLanguageController
-    extends AutoDisposeNotifier<Set<String>> {
+    extends AutoDisposeNotifier<Map<String, String>> {
   @override
-  Set<String> build();
+  Map<String, String> build();
 }

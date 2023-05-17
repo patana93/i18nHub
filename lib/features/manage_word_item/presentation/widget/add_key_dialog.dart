@@ -50,7 +50,7 @@ class AddKeyDialog extends StatelessWidget {
                                 wordItem: WordModel(
                                   key: keyEditingController.text,
                                   translations: {
-                                    for (final lan in languages)
+                                    for (final lan in languages.keys)
                                       TranslationModel(language: lan, value: "")
                                   },
                                 ),

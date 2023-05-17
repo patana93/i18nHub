@@ -99,7 +99,7 @@ class RightPanel extends ConsumerWidget {
                                         .editWordTranslation(
                                             key: selectedItem.key,
                                             newTranslation: TranslationModel(
-                                              language: selectedLanguages
+                                              language: selectedLanguages.keys
                                                   .elementAt(index),
                                               value: selectedItem.translations
                                                   .elementAt(0)
@@ -130,7 +130,8 @@ class RightPanel extends ConsumerWidget {
                                   .elementAt(index)
                                   .isEqualToDefault,
                           decoration: InputDecoration(
-                              labelText: selectedLanguages.elementAt(index)),
+                              labelText:
+                                  selectedLanguages.keys.elementAt(index)),
                           controller: languageTextController,
                           onChanged: (value) {
                             ref
@@ -138,8 +139,8 @@ class RightPanel extends ConsumerWidget {
                                 .editWordTranslation(
                                     key: selectedItem.key,
                                     newTranslation: TranslationModel(
-                                      language:
-                                          selectedLanguages.elementAt(index),
+                                      language: selectedLanguages.keys
+                                          .elementAt(index),
                                       value: value,
                                     ));
                             ref

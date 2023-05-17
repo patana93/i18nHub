@@ -7,11 +7,11 @@ class ManageLanguagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
         flex: 8,
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: const [
+          children: [
             SizedBox(
               width: 10,
             ),

@@ -1,18 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/utils/const.dart';
+import 'package:i18n_app/core/utils/const.dart';
 
 class AddLanaguageDialog extends ConsumerWidget {
   const AddLanaguageDialog({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Set<String> languagesAvailable = {};
+    final Map<String, String> languagesAvailable = {};
 
-    for (final language in Const.language) {
-      if (!ref.read(manageLanguageControllerProvider).contains(language)) {
-        languagesAvailable.add(language);
+    for (final language in Const.language.entries) {
+      if (!ref
+          .read(manageLanguageControllerProvider)
+          .keys
+          .contains(language.key)) {
+        languagesAvailable[language.key] = language.value;
       }
     }
     return Dialog(
@@ -61,11 +64,17 @@ class AddLanaguageDialog extends ConsumerWidget {
                         ref
                             .read(manageLanguageControllerProvider.notifier)
                             .addLanguage(
-                                selectedLanguage:
-                                    languagesAvailable.elementAt(index));
+                                selectedLanguage: MapEntry(
+                                    languagesAvailable.entries
+                                        .elementAt(index)
+                                        .key,
+                                    languagesAvailable.entries
+                                        .elementAt(index)
+                                        .value));
                         Navigator.of(context).pop();
                       },
-                      title: Text(languagesAvailable.elementAt(index)));
+                      title: Text(
+                          languagesAvailable.entries.elementAt(index).key));
                 },
               ),
             )

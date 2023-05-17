@@ -8,19 +8,19 @@ class ManageWordItemPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return const Expanded(
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Expanded(flex: 3, child: LeftPanel()),
-          const SizedBox(
+          Expanded(flex: 3, child: LeftPanel()),
+          SizedBox(
             width: 8,
           ),
           Expanded(
               flex: 7,
               child: Column(
-                children: const [
+                children: [
                   Expanded(flex: 92, child: RightPanel()),
                   ManageLanguagePage()
                 ],

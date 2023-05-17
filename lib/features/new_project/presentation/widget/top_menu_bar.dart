@@ -4,12 +4,13 @@ import 'dart:io';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/core/utils/shared_prefs.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 import 'package:path_provider/path_provider.dart';
 
-import '../../../../utils/const.dart';
+import '../../../../core/utils/const.dart';
 import '../../../manage_language/presentation/controller/manage_language_controller.dart';
 import '../controller/new_project_controller.dart';
 
@@ -82,6 +83,8 @@ class TopMenuBar extends ConsumerWidget {
   }
 
   List<MenuEntry> _getMenus(BuildContext context, WidgetRef ref) {
+    final savePathController = TextEditingController(
+        text: SharedPrefs.getString(SharedPrefs.savePath));
     final List<MenuEntry> result = <MenuEntry>[
       MenuEntry(
         label: 'File',
@@ -150,19 +153,21 @@ class TopMenuBar extends ConsumerWidget {
                                           .read(manageLanguageControllerProvider
                                               .notifier)
                                           .resetToDefault(
-                                              defaultLanguage: Const.language
+                                              defaultLanguage: Const
+                                                  .language.entries
                                                   .elementAt(index));
                                       ref
                                           .read(makeNewProjectControllerProvider
                                               .notifier)
                                           .makeNewProject(
-                                              selectedLanguage: Const.language
+                                              selectedLanguage: Const
+                                                  .language.keys
                                                   .elementAt(index));
 
                                       Navigator.of(context).pop();
                                     },
-                                    title:
-                                        Text(Const.language.elementAt(index)));
+                                    title: Text(
+                                        Const.language.keys.elementAt(index)));
                               },
                             ),
                           )
@@ -176,45 +181,35 @@ class TopMenuBar extends ConsumerWidget {
           ),
           MenuEntry(
             label: 'Save',
-            onPressed: () async {
-              Directory? dir;
-              String filename = "Myjson.json";
-              await getApplicationDocumentsDirectory()
-                  .then((Directory directory) {
-                dir = directory;
+            onPressed: () {
+              String filename = "Myjson.i18n";
 
-                final wordItems = ref.watch(manageWordItemControllerProvider);
-
-                File file = File("${dir!.path}/$filename");
-                file.createSync();
-                file.writeAsStringSync(jsonEncode(wordItems));
-              });
+              final wordItems = ref.watch(manageWordItemControllerProvider);
+              final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
+              File file = File("$saveDir/$filename");
+              file.createSync();
+              file.writeAsStringSync(jsonEncode(wordItems));
             },
           ),
           MenuEntry(
             label: 'Save as Json',
-            onPressed: () async {
-              Directory? dir;
-              await getApplicationDocumentsDirectory()
-                  .then((Directory directory) {
-                dir = directory;
+            onPressed: () {
+              final wordItems = ref.watch(manageWordItemControllerProvider);
+              final langs = ref.watch(manageLanguageControllerProvider);
 
-                final wordItems = ref.watch(manageWordItemControllerProvider);
-                final langs = ref.watch(manageLanguageControllerProvider);
+              final Map<String, String> result = {};
 
-                final Map<String, String> result = {};
-
-                for (var language in langs) {
-                  for (var wordItem in wordItems) {
-                    final transitionModel = wordItem.translations
-                        .firstWhere((element) => element.language == language);
-                    result[wordItem.key] = transitionModel.value;
-                  }
-                  File file = File("${dir!.path}/$language.json");
-                  file.createSync();
-                  file.writeAsStringSync(jsonEncode(result));
+              for (var language in langs.entries) {
+                for (var wordItem in wordItems) {
+                  final transitionModel = wordItem.translations.firstWhere(
+                      (element) => element.language == language.key);
+                  result[wordItem.key] = transitionModel.value;
                 }
-              });
+                final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
+                File file = File("$saveDir/${language.value}.json");
+                file.createSync();
+                file.writeAsStringSync(jsonEncode(result));
+              }
             },
           ),
           MenuEntry(
@@ -223,7 +218,7 @@ class TopMenuBar extends ConsumerWidget {
               FilePickerResult? result = await FilePicker.platform.pickFiles(
                   lockParentWindow: true,
                   type: FileType.custom,
-                  allowedExtensions: ["json"]);
+                  allowedExtensions: ["i18n"]);
               List<File>? files;
               if (result != null) {
                 files = result.paths.map((path) => File(path ?? "")).toList();
@@ -264,7 +259,10 @@ class TopMenuBar extends ConsumerWidget {
                     for (final lan in languages) {
                       ref
                           .read(manageLanguageControllerProvider.notifier)
-                          .addLanguage(selectedLanguage: lan.language);
+                          .addLanguage(
+                              selectedLanguage: Const.language.entries
+                                  .firstWhere((element) =>
+                                      element.key == lan.language));
                     }
                   }
                 },
@@ -272,7 +270,51 @@ class TopMenuBar extends ConsumerWidget {
             },
           )
         ],
-      )
+      ),
+      MenuEntry(label: 'Settings', menuChildren: <MenuEntry>[
+        MenuEntry(
+            label: "Select Save Folder",
+            onPressed: () async {
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Select Directory"),
+                  content: Row(
+                    children: [
+                      SizedBox(
+                          width: 250,
+                          child: TextField(
+                            readOnly: true,
+                            controller: savePathController,
+                            decoration: InputDecoration(
+                                border: OutlineInputBorder(
+                                    borderRadius: BorderRadius.circular(12))),
+                          )),
+                      const SizedBox(
+                        width: 12,
+                      ),
+                      ElevatedButton(
+                          onPressed: () async {
+                            final a =
+                                await FilePicker.platform.getDirectoryPath(
+                              dialogTitle: 'Save Your File to desired location',
+                            );
+                            if (a != null) {
+                              SharedPrefs.setString(SharedPrefs.savePath, a);
+                            }
+
+                            savePathController.text =
+                                a ?? savePathController.text;
+
+                            print(a);
+                          },
+                          child: const Text("Choose dir..."))
+                    ],
+                  ),
+                ),
+              );
+            })
+      ]),
     ];
     return result;
   }
