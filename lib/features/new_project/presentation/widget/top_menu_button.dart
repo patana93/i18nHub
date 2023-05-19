@@ -1,5 +1,4 @@
-import 'dart:convert';
-import 'dart:io';
+/* import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -34,7 +33,7 @@ class TopMenuButton extends ConsumerWidget {
                     fileContent = jsonDecode(jsonFile.readAsStringSync()); 
                   } */
                 });
-                final wordItems = ref.watch(manageWordItemControllerProvider);
+                final nodeItems = ref.watch(manageWordItemControllerProvider);
 
                 final j = ref.read(manageLanguageControllerProvider);
 
@@ -43,19 +42,18 @@ class TopMenuButton extends ConsumerWidget {
                       File("${dir!.path}/${j.values.elementAt(i)}.json");
 
                   final Map<String, dynamic> q = {};
-
-                  for (final wordItem in wordItems) {
-                    q.putIfAbsent(wordItem.key, () {
-                      /*    if (wordItem.translations[i] ==
-                          null) {
-                        return "";
-                      } */
-                      return wordItem.translations.elementAt(i).value;
-                    });
-                  }
-
-                  file.createSync();
+               for (final nodeItem in nodeItems) {
+                    for (final wordItem in nodeItem.wordModelList) {
+                     /*  q.putIfAbsent(wordItem.key, () {
+                        if (wordItem.translations[i] == null) {
+                          return "";
+                        } */
+                        return wordItem.translations.elementAt(i).value;
+                        }
+  }
+                     file.createSync();
                   file.writeAsStringSync(jsonEncode(q));
+                  } 
                 }
 
                 /*final wordItems = ref.watch(wordItemNotifierProvider); */
@@ -66,3 +64,4 @@ class TopMenuButton extends ConsumerWidget {
     );
   }
 }
+ */

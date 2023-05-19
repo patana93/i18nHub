@@ -13,6 +13,9 @@ class RightPanel extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedLanguages = ref.watch(manageLanguageControllerProvider);
     final selectedItem = ref.watch(selectionWordItemControllerProvider);
+    final selectedNode = ref
+        .read(selectionWordItemControllerProvider.notifier)
+        .getNodeSelected();
     return Container(
       decoration: BoxDecoration(
         color: Colors.grey.withAlpha(28),
@@ -82,7 +85,7 @@ class RightPanel extends ConsumerWidget {
 
                       return ListTile(
                         trailing: Visibility(
-                          visible: index != 0,
+                          visible: index != 0 && selectedNode != null,
                           child: Column(
                             children: [
                               Expanded(
@@ -97,6 +100,7 @@ class RightPanel extends ConsumerWidget {
                                         .read(manageWordItemControllerProvider
                                             .notifier)
                                         .editWordTranslation(
+                                            nodeItem: selectedNode!,
                                             key: selectedItem.key,
                                             newTranslation: TranslationModel(
                                               language: selectedLanguages.keys
@@ -137,6 +141,7 @@ class RightPanel extends ConsumerWidget {
                             ref
                                 .read(manageWordItemControllerProvider.notifier)
                                 .editWordTranslation(
+                                    nodeItem: selectedNode!,
                                     key: selectedItem.key,
                                     newTranslation: TranslationModel(
                                       language: selectedLanguages.keys

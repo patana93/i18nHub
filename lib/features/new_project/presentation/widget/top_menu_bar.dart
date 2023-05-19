@@ -5,7 +5,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/core/utils/shared_prefs.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 import 'package:path_provider/path_provider.dart';
@@ -148,7 +148,7 @@ class TopMenuBar extends ConsumerWidget {
                                           .read(
                                               selectionWordItemControllerProvider
                                                   .notifier)
-                                          .selectWordItem(null);
+                                          .selectWordItem(null, null);
                                       ref
                                           .read(manageLanguageControllerProvider
                                               .notifier)
@@ -194,17 +194,20 @@ class TopMenuBar extends ConsumerWidget {
           MenuEntry(
             label: 'Save as Json',
             onPressed: () {
-              final wordItems = ref.watch(manageWordItemControllerProvider);
+              final nodeItems = ref.watch(manageWordItemControllerProvider);
               final langs = ref.watch(manageLanguageControllerProvider);
 
               final Map<String, String> result = {};
 
               for (var language in langs.entries) {
-                for (var wordItem in wordItems) {
-                  final transitionModel = wordItem.translations.firstWhere(
-                      (element) => element.language == language.key);
-                  result[wordItem.key] = transitionModel.value;
+                for (var nodeItem in nodeItems) {
+                  for (var wordItem in nodeItem.wordItems) {
+                    final transitionModel = wordItem.translations.firstWhere(
+                        (element) => element.language == language.key);
+                    result[wordItem.key] = transitionModel.value;
+                  }
                 }
+
                 final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
                 File file = File("$saveDir/${language.value}.json");
                 file.createSync();
@@ -228,32 +231,43 @@ class TopMenuBar extends ConsumerWidget {
 
               await getApplicationDocumentsDirectory().then(
                 (Directory directory) {
+                  final dir = SharedPrefs.getString(SharedPrefs.savePath) ??
+                      directory.path;
+
                   final jsonFile = File(
-                      "${directory.path}${files?.first.path.substring(files.first.path.lastIndexOf("\\"))}");
+                      "$dir${files?.first.path.substring(files.first.path.lastIndexOf("\\"))}");
                   final fileExist = jsonFile.existsSync();
                   if (fileExist) {
                     final List<dynamic> fileContent =
                         jsonDecode(jsonFile.readAsStringSync());
-                    final List<WordModel> wordItemList = [];
+                    final List<NodeModel> nodeItemList = [];
+
                     for (var item in fileContent) {
-                      wordItemList.add(WordModel.fromJson(item));
+                      nodeItemList.add(NodeModel.fromJson(item));
                     }
 
                     ref
                         .read(manageWordItemControllerProvider.notifier)
                         .clearAll();
-                    for (final word in wordItemList) {
+
+                    for (final node in nodeItemList) {
                       ref
                           .read(manageWordItemControllerProvider.notifier)
-                          .addWordItem(wordItem: word);
+                          .addNodeItem(node.nodeKey);
+                      for (final wordItem in node.wordItems) {
+                        ref
+                            .read(manageWordItemControllerProvider.notifier)
+                            .addWordItem(nodeItem: node, wordItem: wordItem);
+                      }
                     }
 
                     final languages = ref
                         .read(manageWordItemControllerProvider)
-                        .map((e) => e.translations)
+                        .map((e) => e.wordItems.map((e) => e.translations))
+                        .expand((element) => element)
+                        .toList()
                         .expand((element) => element)
                         .toList();
-
                     ref.read(manageLanguageControllerProvider.notifier).clear();
 
                     for (final lan in languages) {
@@ -305,8 +319,6 @@ class TopMenuBar extends ConsumerWidget {
 
                             savePathController.text =
                                 a ?? savePathController.text;
-
-                            print(a);
                           },
                           child: const Text("Choose dir..."))
                     ],

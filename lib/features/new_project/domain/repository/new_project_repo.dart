@@ -14,9 +14,9 @@ class NewProjectRepositoryImpl implements NewProjectRepository {
   @override
   void makeNewProject({required Ref ref, required selectedLanguage}) {
     ref.read(manageWordItemControllerProvider.notifier).clearAll();
-    /*    ref
+    ref
         .read(manageWordItemControllerProvider.notifier)
-        .addTranslation(newLanguage: selectedLanguage); */
+        .addTranslationLanguages(newLanguage: selectedLanguage);
   }
 }
 

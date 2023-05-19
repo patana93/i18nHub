@@ -1,20 +1,34 @@
+import 'package:collection/collection.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
-
-import '../../domain/model/word_model.dart';
 
 part 'selection_word_item_controller.g.dart';
 
 @riverpod
 class SelectionWordItemController extends _$SelectionWordItemController {
+  NodeModel? _selectedNode;
+
   @override
-  WordModel? build() {
+  WordItem? build() {
     return null;
   }
 
-  void selectWordItem(WordModel? wordItem) {
+  void selectWordItem(NodeModel? nodeItem, WordItem? wordItem) {
+    if (nodeItem == null) {
+      state = null;
+      return;
+    }
+    _selectedNode = nodeItem;
     state = ref
         .read(manageWordItemControllerProvider.notifier)
-        .getWordItem(wordItem?.key ?? "");
+        .getNodeItem(nodeItem.nodeKey)
+        ?.wordItems
+        .firstWhereOrNull((element) => element.key == (wordItem?.key ?? ""));
+  }
+
+  NodeModel? getNodeSelected() {
+    return _selectedNode;
   }
 }

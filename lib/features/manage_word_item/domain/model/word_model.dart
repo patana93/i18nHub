@@ -1,4 +1,4 @@
-import 'package:equatable/equatable.dart';
+/* import 'package:equatable/equatable.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:json_annotation/json_annotation.dart';
 
@@ -35,3 +35,4 @@ class WordModel extends Equatable {
   @override
   List<Object?> get props => [key, translations];
 }
+ */

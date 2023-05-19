@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/word_item_key_validator_controller.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/word_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 
 class AddKeyDialog extends StatelessWidget {
-  final WordModel? wordItemEdit;
+  final NodeModel nodeItem;
+  final WordItem? wordItemEdit;
   // final ScrollController scrollController;
   final String searchString;
   const AddKeyDialog(
       {
       //required this.scrollController,
+      required this.nodeItem,
       this.wordItemEdit,
       required this.searchString,
       super.key});
@@ -47,22 +49,25 @@ class AddKeyDialog extends StatelessWidget {
                         ref
                             .read(manageWordItemControllerProvider.notifier)
                             .addWordItem(
-                                wordItem: WordModel(
+                                nodeItem: nodeItem,
+                                wordItem: (
                                   key: keyEditingController.text,
                                   translations: {
                                     for (final lan in languages.keys)
                                       TranslationModel(language: lan, value: "")
-                                  },
+                                  }
                                 ),
                                 searchString: searchString);
                       } else {
                         ref
                             .read(manageWordItemControllerProvider.notifier)
                             .editWordItemKey(
+                                newNodeItem: nodeItem,
                                 oldKey: wordItemEdit!.key,
-                                newWordItem: WordModel(
-                                    key: keyEditingController.text,
-                                    translations: wordItemEdit!.translations),
+                                newWordItem: (
+                                  key: keyEditingController.text,
+                                  translations: wordItemEdit!.translations
+                                ),
                                 searchString: searchString);
                       }
 
