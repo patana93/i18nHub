@@ -22,6 +22,7 @@ class ManageWordItemRepo {
 
   void addNodeItem(String nodeKey) {
     nodeItems.add(NodeModel(nodeKey: nodeKey, wordItems: []));
+    sortNode();
   }
 
   void addWordItem({required String nodeKey, required WordItem wordItem}) {
@@ -29,15 +30,30 @@ class ManageWordItemRepo {
         .firstWhere((element) => element.nodeKey == nodeKey)
         .wordItems
         .add(wordItem);
+    sortWordItem();
   }
 
-  void removeWordItem({required String nodeKey, required String key}) =>
-      nodeItems
-          .firstWhere((element) => element.nodeKey == nodeKey)
-          .wordItems
-          .removeWhere(
-            (element) => element.key == key,
-          );
+  void sortNode() {
+    nodeItems.sort(
+        (a, b) => a.nodeKey.toLowerCase().compareTo(b.nodeKey.toLowerCase()));
+  }
+
+  void sortWordItem() {
+    for (var element in nodeItems) {
+      element.wordItems.sortByCompare((element) => element,
+          (a, b) => a.key.toLowerCase().compareTo(b.key.toLowerCase()));
+    }
+  }
+
+  void removeWordItem({required String nodeKey, required String key}) {
+    nodeItems
+        .firstWhere((element) => element.nodeKey == nodeKey)
+        .wordItems
+        .removeWhere(
+          (element) => element.key == key,
+        );
+    sortWordItem();
+  }
 
   editWordItemKey(
       {required String nodeKey,
@@ -110,20 +126,6 @@ class ManageWordItemRepo {
               )
               .toList()));
     }
-    /* nodeItems.map((e) => e.copyWith(
-        nodeKey: tempList.first.nodeKey,
-        wordItems: tempList.first.wordItems));
-    nodeItems
-        .firstWhere((element) => element.nodeKey == nodeKey)
-        .wordItems
-        .addAll(tempList
-            .map(
-              (e) => e.copyWith(translations: {
-                for (final translation in e.translations)
-                  if (translation.language != oldLanguage) translation
-              }),
-            )
-            .toList()); */
   }
 
   editWordTranslation(
