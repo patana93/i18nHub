@@ -23,7 +23,17 @@ class ManageWordItemController extends _$ManageWordItemController {
   }
 
   void addNodeItem(String nodeKey) {
-    _manageWordItemRepo.addNodeItem(nodeKey);
+    _manageWordItemRepo.addNodeItem(nodeKey: nodeKey);
+    state = [..._manageWordItemRepo.getAllNodeItems()];
+  }
+
+  void removeNodeItem(String nodeKey) {
+    _manageWordItemRepo.removeNodeItem(nodeKey);
+    state = [..._manageWordItemRepo.getAllNodeItems()];
+  }
+
+  void editNodeItem(String nodeKey, newNodeKey) {
+    _manageWordItemRepo.editNodeItem(nodeKey, newNodeKey);
     state = [..._manageWordItemRepo.getAllNodeItems()];
   }
 

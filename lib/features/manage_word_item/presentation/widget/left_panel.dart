@@ -89,6 +89,7 @@ class LeftPanel extends ConsumerWidget {
                                           .read(manageWordItemControllerProvider
                                               .notifier)
                                           .addNodeItem(controller.text);
+                                      Navigator.of(context).pop();
                                     },
                                     child: const Text("Save"))
                               ],
@@ -147,7 +148,67 @@ class LeftPanel extends ConsumerWidget {
                                             },
                                           );
                                         },
-                                        icon: const Icon(Icons.add))
+                                        icon: const Icon(Icons.add)),
+                                    IconButton(
+                                        onPressed: () {
+                                          //TODO ADD ALERT TO CONFIRM
+                                          ref
+                                              .read(
+                                                  manageWordItemControllerProvider
+                                                      .notifier)
+                                              .removeNodeItem(e.nodeKey);
+                                        },
+                                        icon: const Icon(Icons.remove)),
+                                    IconButton(
+                                        onPressed: () {
+                                          showDialog(
+                                            context: context,
+                                            builder: (context) {
+                                              final controller =
+                                                  TextEditingController(
+                                                      text: e.nodeKey);
+                                              return AlertDialog(
+                                                title: const Text("Edit Node"),
+                                                content: TextFormField(
+                                                  controller: controller,
+                                                  decoration:
+                                                      const InputDecoration(
+                                                          hintText:
+                                                              'Enter the node',
+                                                          hintStyle: TextStyle(
+                                                            fontSize: 18,
+                                                            fontStyle: FontStyle
+                                                                .italic,
+                                                          ),
+                                                          border:
+                                                              OutlineInputBorder(
+                                                                  borderRadius:
+                                                                      BorderRadius
+                                                                          .all(
+                                                            Radius.circular(8),
+                                                          ))),
+                                                ),
+                                                actions: [
+                                                  TextButton(
+                                                      onPressed: () {
+                                                        ref
+                                                            .read(
+                                                                manageWordItemControllerProvider
+                                                                    .notifier)
+                                                            .editNodeItem(
+                                                                e.nodeKey,
+                                                                controller
+                                                                    .text);
+                                                        Navigator.of(context)
+                                                            .pop();
+                                                      },
+                                                      child: const Text("Save"))
+                                                ],
+                                              );
+                                            },
+                                          );
+                                        },
+                                        icon: const Icon(Icons.edit))
                                   ],
                                 );
                               },

@@ -20,9 +20,21 @@ class ManageWordItemRepo {
   NodeModel? getNodeItem(String? key) =>
       nodeItems.firstWhereOrNull((element) => element.nodeKey == key);
 
-  void addNodeItem(String nodeKey) {
-    nodeItems.add(NodeModel(nodeKey: nodeKey, wordItems: []));
+  void addNodeItem({required String nodeKey, List<WordItem>? wordItem}) {
+    nodeItems.add(NodeModel(nodeKey: nodeKey, wordItems: wordItem ?? []));
     sortNode();
+  }
+
+  void removeNodeItem(nodeKey) {
+    nodeItems.removeWhere((element) => element.nodeKey == nodeKey);
+  }
+
+  void editNodeItem(nodeKey, String newNodeKey) {
+    final nodeItem =
+        nodeItems.firstWhere((element) => element.nodeKey == nodeKey);
+
+    removeNodeItem(nodeKey);
+    addNodeItem(nodeKey: newNodeKey, wordItem: nodeItem.wordItems);
   }
 
   void addWordItem({required String nodeKey, required WordItem wordItem}) {
