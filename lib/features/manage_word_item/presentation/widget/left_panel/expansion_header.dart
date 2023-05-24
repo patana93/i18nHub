@@ -74,7 +74,14 @@ class ExpansionHeader extends ConsumerWidget {
                 },
               );
             },
-            icon: const Icon(Icons.edit))
+            icon: const Icon(Icons.edit)),
+        Visibility(
+            visible: nodeItem.wordItems.any((element) =>
+                element.translations.any((element) => element.value.isEmpty)),
+            child: const Icon(
+              Icons.warning,
+              color: Colors.amber,
+            )),
       ],
     );
   }

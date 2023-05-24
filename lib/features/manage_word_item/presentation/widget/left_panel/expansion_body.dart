@@ -35,10 +35,25 @@ class ExpansionBody extends ConsumerWidget {
                   .selectWordItem(nodeItem, item);
             },
             title: Text(item.key),
-            trailing: WordItemContextMenu(
-                nodeItem: nodeItem,
-                item: item,
-                textEditingController: textEditingController),
+            trailing: SizedBox(
+              width: 100,
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Visibility(
+                      visible: item.translations
+                          .any((element) => element.value.isEmpty),
+                      child: const Icon(
+                        Icons.warning,
+                        color: Colors.amber,
+                      )),
+                  WordItemContextMenu(
+                      nodeItem: nodeItem,
+                      item: item,
+                      textEditingController: textEditingController),
+                ],
+              ),
+            ),
           );
         },
       ),
