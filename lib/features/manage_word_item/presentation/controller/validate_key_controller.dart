@@ -1,7 +1,7 @@
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-part 'word_item_key_validator_controller.g.dart';
+part 'validate_key_controller.g.dart';
 
 @riverpod
 class ValidateKeyController extends _$ValidateKeyController {

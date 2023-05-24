@@ -1,65 +1,11 @@
-import 'dart:convert';
-import 'dart:io';
-
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/shared_prefs.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
-import 'package:path_provider/path_provider.dart';
-
-import '../../../../core/utils/const.dart';
-import '../../../manage_language/presentation/controller/manage_language_controller.dart';
-import '../controller/new_project_controller.dart';
-
-class MenuEntry {
-  const MenuEntry(
-      {required this.label, this.shortcut, this.onPressed, this.menuChildren})
-      : assert(menuChildren == null || onPressed == null,
-            'onPressed is ignored if menuChildren are provided');
-  final String label;
-
-  final MenuSerializableShortcut? shortcut;
-  final VoidCallback? onPressed;
-  final List<MenuEntry>? menuChildren;
-
-  static List<Widget> build(List<MenuEntry> selections) {
-    Widget buildSelection(MenuEntry selection) {
-      if (selection.menuChildren != null) {
-        return SubmenuButton(
-          menuChildren: MenuEntry.build(selection.menuChildren!),
-          child: Text(selection.label),
-        );
-      }
-      return MenuItemButton(
-        shortcut: selection.shortcut,
-        onPressed: selection.onPressed,
-        child: Text(selection.label),
-      );
-    }
-
-    return selections.map<Widget>(buildSelection).toList();
-  }
-
-  static Map<MenuSerializableShortcut, Intent> shortcuts(
-      List<MenuEntry> selections) {
-    final Map<MenuSerializableShortcut, Intent> result =
-        <MenuSerializableShortcut, Intent>{};
-    for (final MenuEntry selection in selections) {
-      if (selection.menuChildren != null) {
-        result.addAll(MenuEntry.shortcuts(selection.menuChildren!));
-      } else {
-        if (selection.shortcut != null && selection.onPressed != null) {
-          result[selection.shortcut!] =
-              VoidCallbackIntent(selection.onPressed!);
-        }
-      }
-    }
-    return result;
-  }
-}
+import 'package:i18n_app/features/new_project/presentation/widget/file_menu/load.dart';
+import 'package:i18n_app/features/new_project/presentation/widget/file_menu/new_project.dart';
+import 'package:i18n_app/features/new_project/presentation/widget/file_menu/save.dart';
+import 'package:i18n_app/features/new_project/presentation/widget/file_menu/save_as_json.dart';
+import 'package:i18n_app/features/new_project/presentation/widget/menu_entry.dart';
+import 'package:i18n_app/features/new_project/presentation/widget/settings_menu/select_save_path.dart';
 
 class TopMenuBar extends ConsumerWidget {
   const TopMenuBar({super.key});
@@ -83,250 +29,22 @@ class TopMenuBar extends ConsumerWidget {
   }
 
   List<MenuEntry> _getMenus(BuildContext context, WidgetRef ref) {
-    final savePathController = TextEditingController(
-        text: SharedPrefs.getString(SharedPrefs.savePath));
     final List<MenuEntry> result = <MenuEntry>[
       MenuEntry(
         label: 'File',
         menuChildren: <MenuEntry>[
-          MenuEntry(
-            label: 'New Project',
-            onPressed: () {
-              showDialog(
-                context: context,
-                builder: (context) {
-                  return Dialog(
-                    child: ConstrainedBox(
-                      constraints: BoxConstraints(
-                          minWidth: 300,
-                          maxWidth:
-                              MediaQuery.of(context).size.width / 4 + 300),
-                      child: Column(
-                        children: [
-                          const Padding(
-                            padding: EdgeInsets.all(8.0),
-                            child: Text(
-                              "Selecte Default Language",
-                              style: TextStyle(
-                                  fontSize: 24, fontWeight: FontWeight.bold),
-                            ),
-                          ),
-                          const Text(
-                            "You cannot change this after",
-                            style: TextStyle(fontSize: 16),
-                          ),
-                          /*     Padding(
-                      padding: const EdgeInsets.all(8.0),
-                      child: TextField(
-                        //  focusNode: _focus,
-                        //  controller: _textEditingController,
-                        decoration: const InputDecoration(
-                          hintText: 'Search',
-                          hintStyle: TextStyle(
-                            fontSize: 18,
-                            fontStyle: FontStyle.italic,
-                          ),
-                          border: OutlineInputBorder(
-                              borderRadius:
-                                  BorderRadius.all(Radius.circular(12))),
-                        ),
-                        onChanged: (value) {
-                          // ref
-                          //     .read(wordItemFilteredNotifierProvider.notifier)
-                          //   .filterData(value);
-                        },
-                      ),
-                    ), */
-                          Expanded(
-                            child: ListView.builder(
-                              shrinkWrap: true,
-                              itemCount: Const.language.length,
-                              itemBuilder: (context, index) {
-                                return ListTile(
-                                    onTap: () {
-                                      ref
-                                          .read(
-                                              selectionWordItemControllerProvider
-                                                  .notifier)
-                                          .selectWordItem(null, null);
-                                      ref
-                                          .read(manageLanguageControllerProvider
-                                              .notifier)
-                                          .resetToDefault(
-                                              defaultLanguage: Const
-                                                  .language.entries
-                                                  .elementAt(index));
-                                      ref
-                                          .read(makeNewProjectControllerProvider
-                                              .notifier)
-                                          .makeNewProject(
-                                              selectedLanguage: Const
-                                                  .language.keys
-                                                  .elementAt(index));
-
-                                      Navigator.of(context).pop();
-                                    },
-                                    title: Text(
-                                        Const.language.keys.elementAt(index)));
-                              },
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  );
-                },
-              );
-            },
-          ),
-          MenuEntry(
-            label: 'Save',
-            onPressed: () {
-              String filename = "Myjson.i18n";
-
-              final wordItems = ref.watch(manageWordItemControllerProvider);
-              final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
-              File file = File("$saveDir/$filename");
-              file.createSync();
-              file.writeAsStringSync(jsonEncode(wordItems));
-            },
-          ),
-          MenuEntry(
-            label: 'Save as Json',
-            onPressed: () {
-              final nodeItems = ref.watch(manageWordItemControllerProvider);
-              final langs = ref.watch(manageLanguageControllerProvider);
-
-              final Map<String, String> result = {};
-
-              for (var language in langs.entries) {
-                for (var nodeItem in nodeItems) {
-                  for (var wordItem in nodeItem.wordItems) {
-                    final transitionModel = wordItem.translations.firstWhere(
-                        (element) => element.language == language.key);
-                    result[wordItem.key] = transitionModel.value;
-                  }
-                }
-
-                final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
-                File file = File("$saveDir/${language.value}.json");
-                file.createSync();
-                file.writeAsStringSync(jsonEncode(result));
-              }
-            },
-          ),
-          MenuEntry(
-            label: "Load",
-            onPressed: () async {
-              FilePickerResult? result = await FilePicker.platform.pickFiles(
-                  lockParentWindow: true,
-                  type: FileType.custom,
-                  allowedExtensions: ["i18n"]);
-              List<File>? files;
-              if (result != null) {
-                files = result.paths.map((path) => File(path ?? "")).toList();
-              } else {
-                // User canceled the picker
-              }
-
-              await getApplicationDocumentsDirectory().then(
-                (Directory directory) {
-                  final dir = SharedPrefs.getString(SharedPrefs.savePath) ??
-                      directory.path;
-
-                  final jsonFile = File(
-                      "$dir${files?.first.path.substring(files.first.path.lastIndexOf("\\"))}");
-                  final fileExist = jsonFile.existsSync();
-                  if (fileExist) {
-                    final List<dynamic> fileContent =
-                        jsonDecode(jsonFile.readAsStringSync());
-                    final List<NodeModel> nodeItemList = [];
-
-                    for (var item in fileContent) {
-                      nodeItemList.add(NodeModel.fromJson(item));
-                    }
-
-                    ref
-                        .read(manageWordItemControllerProvider.notifier)
-                        .clearAll();
-
-                    for (final node in nodeItemList) {
-                      ref
-                          .read(manageWordItemControllerProvider.notifier)
-                          .addNodeItem(node.nodeKey);
-                      for (final wordItem in node.wordItems) {
-                        ref
-                            .read(manageWordItemControllerProvider.notifier)
-                            .addWordItem(nodeItem: node, wordItem: wordItem);
-                      }
-                    }
-
-                    final languages = ref
-                        .read(manageWordItemControllerProvider)
-                        .map((e) => e.wordItems.map((e) => e.translations))
-                        .expand((element) => element)
-                        .toList()
-                        .expand((element) => element)
-                        .toList();
-                    ref.read(manageLanguageControllerProvider.notifier).clear();
-
-                    for (final lan in languages) {
-                      ref
-                          .read(manageLanguageControllerProvider.notifier)
-                          .addLanguage(
-                              selectedLanguage: Const.language.entries
-                                  .firstWhere((element) =>
-                                      element.key == lan.language));
-                    }
-                  }
-                },
-              );
-            },
-          )
+          getNewProjectMenu(context, ref),
+          getSaveMenu(ref),
+          getSaveAsJsonMenu(ref),
+          getLoadMenu(ref),
         ],
       ),
-      MenuEntry(label: 'Settings', menuChildren: <MenuEntry>[
-        MenuEntry(
-            label: "Select Save Folder",
-            onPressed: () async {
-              showDialog(
-                context: context,
-                builder: (context) => AlertDialog(
-                  title: const Text("Select Directory"),
-                  content: Row(
-                    children: [
-                      SizedBox(
-                          width: 250,
-                          child: TextField(
-                            readOnly: true,
-                            controller: savePathController,
-                            decoration: InputDecoration(
-                                border: OutlineInputBorder(
-                                    borderRadius: BorderRadius.circular(12))),
-                          )),
-                      const SizedBox(
-                        width: 12,
-                      ),
-                      ElevatedButton(
-                          onPressed: () async {
-                            final a =
-                                await FilePicker.platform.getDirectoryPath(
-                              dialogTitle: 'Save Your File to desired location',
-                            );
-                            if (a != null) {
-                              SharedPrefs.setString(SharedPrefs.savePath, a);
-                            }
-
-                            savePathController.text =
-                                a ?? savePathController.text;
-                          },
-                          child: const Text("Choose dir..."))
-                    ],
-                  ),
-                ),
-              );
-            })
-      ]),
+      MenuEntry(
+        label: 'Settings',
+        menuChildren: <MenuEntry>[
+          getSelecteSavePathMenu(context),
+        ],
+      ),
     ];
     return result;
   }

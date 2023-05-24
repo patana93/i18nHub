@@ -28,7 +28,5 @@ class SelectionWordItemController extends _$SelectionWordItemController {
         .firstWhereOrNull((element) => element.key == (wordItem?.key ?? ""));
   }
 
-  NodeModel? getNodeSelected() {
-    return _selectedNode;
-  }
+  NodeModel? get selectedNode => _selectedNode;
 }

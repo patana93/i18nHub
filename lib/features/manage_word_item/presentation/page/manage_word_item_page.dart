@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:i18n_app/features/manage_language/presentation/page/manage_language_page.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/right_panel.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/left_panel.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/widget/right_panel/right_panel.dart';
 
 class ManageWordItemPage extends StatelessWidget {
   const ManageWordItemPage({super.key});

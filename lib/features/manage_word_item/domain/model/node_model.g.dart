@@ -8,6 +8,7 @@ part of 'node_model.dart';
 
 NodeModel _$NodeModelFromJson(Map<String, dynamic> json) => NodeModel(
       nodeKey: json['nodeKey'] as String,
+      isPanelExpanded: json['isPanelExpanded'] as bool? ?? false,
       wordItems: (json['wordItems'] as List<dynamic>)
           .map((e) => _$recordConvert(
                 e,

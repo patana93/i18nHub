@@ -12,7 +12,7 @@ class ManageWordItemRepo {
   //          TranslationModel(language: "Spanish", value: index.toString())
   //        }));
   final List<NodeModel> nodeItems = [
-    NodeModel(nodeKey: "Main Node", wordItems: [])
+    NodeModel(nodeKey: "Main Node", wordItems: [], isPanelExpanded: true)
   ];
 
   List<NodeModel> getAllNodeItems() => nodeItems;
@@ -20,16 +20,20 @@ class ManageWordItemRepo {
   NodeModel? getNodeItem(String? key) =>
       nodeItems.firstWhereOrNull((element) => element.nodeKey == key);
 
-  void addNodeItem({required String nodeKey, List<WordItem>? wordItem}) {
-    nodeItems.add(NodeModel(nodeKey: nodeKey, wordItems: wordItem ?? []));
+  void addNodeItem(
+      {required String nodeKey, List<WordItem>? wordItem, bool? isExpanded}) {
+    nodeItems.add(NodeModel(
+        nodeKey: nodeKey,
+        wordItems: wordItem ?? [],
+        isPanelExpanded: isExpanded ?? false));
     sortNode();
   }
 
-  void removeNodeItem(nodeKey) {
+  void removeNodeItem(String nodeKey) {
     nodeItems.removeWhere((element) => element.nodeKey == nodeKey);
   }
 
-  void editNodeItem(nodeKey, String newNodeKey) {
+  void editNodeItem(String nodeKey, String newNodeKey) {
     final nodeItem =
         nodeItems.firstWhere((element) => element.nodeKey == nodeKey);
 
@@ -81,6 +85,9 @@ class ManageWordItemRepo {
           .toList()
           .any((element) => element.toLowerCase() == key.toLowerCase()));
 
+  bool checkNodeItemKeyAlreadyExist({required String key}) => nodeItems
+      .any((element) => element.nodeKey.toLowerCase() == key.toLowerCase());
+
   List<NodeModel> filterData(String searchString) {
     if (searchString.isEmpty) {
       return nodeItems;
@@ -106,6 +113,7 @@ class ManageWordItemRepo {
 
     for (var item in tempList) {
       nodeItems.add(NodeModel(
+          isPanelExpanded: item.isPanelExpanded,
           nodeKey: item.nodeKey,
           wordItems: item.wordItems
               .map((wordItem) => ((
@@ -125,11 +133,12 @@ class ManageWordItemRepo {
     nodeItems.clear();
     for (var item in tempList) {
       nodeItems.add(NodeModel(
+          isPanelExpanded: item.isPanelExpanded,
           nodeKey: item.nodeKey,
           wordItems: item.wordItems
               .map(
                 (e) => (
-                  key: "m",
+                  key: e.key,
                   translations: {
                     for (final translation in e.translations)
                       if (translation.language != oldLanguage) translation
@@ -160,22 +169,6 @@ class ManageWordItemRepo {
           .firstWhere((element) => element.nodeKey == nodeKey)
           .wordItems
           .sublist(0, index),
-
-      /* nodeItems
-          .firstWhere((element) => element.nodeKey == nodeKey)
-          .wordItems[index]
-          .copyWith(translations: {
-        for (final translation in wordItem.translations)
-          if (translation.language == newTranslation.language)
-            newTranslation.copyWith(
-                language: newTranslation.language,
-                value: newTranslation.value,
-                isEqualToDefault:
-                    isEqualToDefault ?? translation.isEqualToDefault)
-          else
-            translation
-      }), */
-
       (
         key: wordItem.key,
         translations: {
@@ -206,4 +199,13 @@ class ManageWordItemRepo {
   }
 
   clearAll() => nodeItems.clear();
+
+  toggleExpansion(NodeModel nodeItem) {
+    removeNodeItem(nodeItem.nodeKey);
+
+    addNodeItem(
+        nodeKey: nodeItem.nodeKey,
+        wordItem: nodeItem.wordItems,
+        isExpanded: !(nodeItem.isPanelExpanded ?? true));
+  }
 }

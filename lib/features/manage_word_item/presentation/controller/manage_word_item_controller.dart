@@ -30,6 +30,9 @@ class ManageWordItemController extends _$ManageWordItemController {
   void removeNodeItem(String nodeKey) {
     _manageWordItemRepo.removeNodeItem(nodeKey);
     state = [..._manageWordItemRepo.getAllNodeItems()];
+    ref
+        .read(selectionWordItemControllerProvider.notifier)
+        .selectWordItem(null, null);
   }
 
   void editNodeItem(String nodeKey, newNodeKey) {
@@ -43,7 +46,7 @@ class ManageWordItemController extends _$ManageWordItemController {
       String? searchString}) async {
     _manageWordItemRepo.addWordItem(
         nodeKey: nodeItem.nodeKey, wordItem: wordItem);
-    state = [..._manageWordItemRepo.getAllNodeItems()];
+    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
 
     ref
         .read(selectionWordItemControllerProvider.notifier)
@@ -76,14 +79,16 @@ class ManageWordItemController extends _$ManageWordItemController {
   bool checkWordItemKeyAlreadyExist({required String key}) =>
       _manageWordItemRepo.checkWordItemKeyAlreadyExist(key: key.toLowerCase());
 
+  bool checkNodeItemKeyAlreadyExist({required String key}) =>
+      _manageWordItemRepo.checkNodeItemKeyAlreadyExist(key: key.toLowerCase());
+
   void addTranslationLanguages(
       {required String newLanguage, String? searchString}) {
     _manageWordItemRepo.addTranslationLanguages(newLanguage: newLanguage);
     state = [..._manageWordItemRepo.filterData(searchString ?? "")];
     final selectedWordItem = ref.read(selectionWordItemControllerProvider);
-    final selectedNodeitem = ref
-        .read(selectionWordItemControllerProvider.notifier)
-        .getNodeSelected();
+    final selectedNodeitem =
+        ref.read(selectionWordItemControllerProvider.notifier).selectedNode;
 
     ref.read(selectionWordItemControllerProvider.notifier).selectWordItem(
         selectedNodeitem,
@@ -121,5 +126,14 @@ class ManageWordItemController extends _$ManageWordItemController {
   void clearAll() {
     _manageWordItemRepo.clearAll();
     state = [..._manageWordItemRepo.getAllNodeItems()];
+  }
+
+  setPanelExpansion(String? searchString, NodeModel nodeItem) {
+    _manageWordItemRepo.toggleExpansion(nodeItem);
+    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
+
+    ref
+        .read(selectionWordItemControllerProvider.notifier)
+        .selectWordItem(nodeItem, null);
   }
 }

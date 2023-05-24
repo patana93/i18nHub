@@ -1,6 +1,6 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'word_item_key_validator_controller.dart';
+part of 'validate_key_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator

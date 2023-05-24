@@ -10,9 +10,9 @@ class MakeNewProjectController extends _$MakeNewProjectController {
   void build() {}
 
   void makeNewProject({required String selectedLanguage}) async {
-    final authRepository = ref.read(makeNewProjectRepositoryProvider);
+    final newProjectRepo = ref.read(makeNewProjectRepositoryProvider);
 
-    state = authRepository.makeNewProject(
+    state = newProjectRepo.makeNewProject(
         ref: ref, selectedLanguage: selectedLanguage);
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/word_item_key_validator_controller.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/validate_key_controller.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';

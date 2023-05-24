@@ -8,10 +8,13 @@ typedef WordItem = ({String key, Set<TranslationModel> translations});
 @JsonSerializable()
 class NodeModel {
   final String nodeKey;
+  @JsonKey(includeToJson: false, includeFromJson: true)
+  final bool? isPanelExpanded;
   final List<WordItem> wordItems;
 
   NodeModel({
     required this.nodeKey,
+    this.isPanelExpanded = false,
     required this.wordItems,
   });
 
@@ -19,18 +22,13 @@ class NodeModel {
       _$NodeModelFromJson(json);
 
   Map<String, dynamic> toJson() => _$NodeModelToJson(this);
-}
 
-  
-
-/*   NodeModel copyWith({String? nodeKey, List<WordModel>? wordModelList}) {
+  NodeModel copyWith(
+      {String? nodeKey, bool? isPanelExpanded, List<WordItem>? wordItems}) {
     return NodeModel(
       nodeKey: nodeKey ?? this.nodeKey,
-      wordModelList: wordModelList ?? this.wordModelList,
+      isPanelExpanded: isPanelExpanded ?? this.isPanelExpanded,
+      wordItems: wordItems ?? this.wordItems,
     );
-  } */
-
-/*   @override
-  String toString() {
-    return "NodeModel nodeKey: $nodeKey -> $wordModelList";
-  } */
+  }
+}

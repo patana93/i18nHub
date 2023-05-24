@@ -7,7 +7,7 @@ part of 'selection_word_item_controller.dart';
 // **************************************************************************
 
 String _$selectionWordItemControllerHash() =>
-    r'12178036bd17619839c15b3a61ecbc5e41cee13f';
+    r'2078021d7cea7a357122376ae56935fcd1daa41f';
 
 /// See also [SelectionWordItemController].
 @ProviderFor(SelectionWordItemController)
