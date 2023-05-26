@@ -42,7 +42,7 @@ class NodeList extends ConsumerWidget {
                       isExpanded: nodeItem.isPanelExpanded ?? false,
                       headerBuilder: (context, isExpanded) => ExpansionHeader(
                             nodeItem: nodeItem,
-                            textEditingController: textEditingController,
+                            searchTextEditingController: textEditingController,
                           ),
                       body: ExpansionBody(
                         nodeItem: nodeItem,

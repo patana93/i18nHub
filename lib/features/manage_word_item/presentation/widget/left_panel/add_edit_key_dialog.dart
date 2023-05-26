@@ -6,12 +6,12 @@ import 'package:i18n_app/features/manage_language/presentation/controller/manage
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 
-class AddKeyDialog extends StatelessWidget {
+class AddEditKeyDialog extends StatelessWidget {
   final NodeModel nodeItem;
   final WordItem? wordItemEdit;
   // final ScrollController scrollController;
   final String searchString;
-  const AddKeyDialog(
+  const AddEditKeyDialog(
       {
       //required this.scrollController,
       required this.nodeItem,
@@ -28,22 +28,44 @@ class AddKeyDialog extends StatelessWidget {
 
     return AlertDialog(
       title: Text(wordItemEdit == null ? "Add key" : "Edit key"),
+      content: Consumer(builder: (context, ref, child) {
+        String? errorMessage = "";
+        ref.listen(validateKeyControllerProvider, (previous, next) {
+          errorMessage = next;
+        });
+
+        return TextFormField(
+          autovalidateMode: AutovalidateMode.onUserInteraction,
+          validator: (value) {
+            return errorMessage;
+          },
+          onChanged: (value) {
+            ref.read(validateKeyControllerProvider.notifier).validate(value);
+          },
+          controller: keyEditingController,
+          decoration: const InputDecoration(
+            errorMaxLines: 2,
+            hintText: 'Enter the key',
+            hintStyle: TextStyle(
+              fontSize: 18,
+              fontStyle: FontStyle.italic,
+            ),
+            border: OutlineInputBorder(
+              borderRadius: BorderRadius.all(
+                Radius.circular(8),
+              ),
+            ),
+          ),
+        );
+      }),
       actions: [
         Consumer(
           builder: (context, ref, child) => TextButton(
               onPressed: ref.watch(validateKeyControllerProvider) != null
                   ? null
-                  : () async {
-                      if (keyEditingController.text.isEmpty ||
-                          keyEditingController.text.contains(" ") ||
-                          ref
-                              .read(manageWordItemControllerProvider.notifier)
-                              .checkWordItemKeyAlreadyExist(
-                                  key: keyEditingController.text)) {
-                        return;
-                      }
+                  : () {
                       final languages =
-                          ref.read(manageLanguageControllerProvider);
+                          ref.watch(manageLanguageControllerProvider);
 
                       if (wordItemEdit == null) {
                         ref
@@ -71,6 +93,7 @@ class AddKeyDialog extends StatelessWidget {
                                 searchString: searchString);
                       }
 
+                      Navigator.of(context).pop();
                       //  await Scrollable.ensureVisible(context);
 
                       //  scrollController
@@ -80,40 +103,11 @@ class AddKeyDialog extends StatelessWidget {
                       //    curve: Curves.easeOut,
                       //  )
                       //      .whenComplete(() {
-                      keyEditingController.text = "";
-                      Navigator.of(context).pop();
                       //});
                     },
               child: const Text("Save")),
         )
       ],
-      content: Consumer(builder: (context, ref, child) {
-        String? errorMessage = "";
-        ref.listen(validateKeyControllerProvider, (previous, next) {
-          errorMessage = next;
-        });
-
-        return TextFormField(
-          autovalidateMode: AutovalidateMode.onUserInteraction,
-          validator: (value) {
-            return errorMessage;
-          },
-          onChanged: (value) {
-            ref.read(validateKeyControllerProvider.notifier).validate(value);
-          },
-          controller: keyEditingController,
-          decoration: const InputDecoration(
-              hintText: 'Enter the key',
-              hintStyle: TextStyle(
-                fontSize: 18,
-                fontStyle: FontStyle.italic,
-              ),
-              border: OutlineInputBorder(
-                  borderRadius: BorderRadius.all(
-                Radius.circular(8),
-              ))),
-        );
-      }),
     );
   }
 }

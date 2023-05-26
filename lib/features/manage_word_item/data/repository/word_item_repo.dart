@@ -12,7 +12,7 @@ class ManageWordItemRepo {
   //          TranslationModel(language: "Spanish", value: index.toString())
   //        }));
   final List<NodeModel> nodeItems = [
-    NodeModel(nodeKey: "Main Node", wordItems: [], isPanelExpanded: true)
+    NodeModel(nodeKey: "main", wordItems: [], isPanelExpanded: true)
   ];
 
   List<NodeModel> getAllNodeItems() => nodeItems;
@@ -33,12 +33,16 @@ class ManageWordItemRepo {
     nodeItems.removeWhere((element) => element.nodeKey == nodeKey);
   }
 
-  void editNodeItem(String nodeKey, String newNodeKey) {
+  void editNodeItem(
+      {required String nodeKey, required String newNodeKey, bool? isExpanded}) {
     final nodeItem =
         nodeItems.firstWhere((element) => element.nodeKey == nodeKey);
 
     removeNodeItem(nodeKey);
-    addNodeItem(nodeKey: newNodeKey, wordItem: nodeItem.wordItems);
+    addNodeItem(
+        nodeKey: newNodeKey,
+        wordItem: nodeItem.wordItems,
+        isExpanded: isExpanded);
   }
 
   void addWordItem({required String nodeKey, required WordItem wordItem}) {

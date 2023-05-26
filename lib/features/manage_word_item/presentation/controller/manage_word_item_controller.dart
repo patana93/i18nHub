@@ -35,8 +35,10 @@ class ManageWordItemController extends _$ManageWordItemController {
         .selectWordItem(null, null);
   }
 
-  void editNodeItem(String nodeKey, newNodeKey) {
-    _manageWordItemRepo.editNodeItem(nodeKey, newNodeKey);
+  void editNodeItem(
+      {required String nodeKey, required String newNodeKey, bool? isExpanded}) {
+    _manageWordItemRepo.editNodeItem(
+        nodeKey: nodeKey, newNodeKey: newNodeKey, isExpanded: isExpanded);
     state = [..._manageWordItemRepo.getAllNodeItems()];
   }
 

@@ -12,7 +12,8 @@ class LeftPanel extends StatelessWidget {
     return Column(
       children: [
         Flexible(
-          child: SearchItemsBar(textEditingController: textEditingController),
+          child: SearchItemsBar(
+              searchTextEditingController: textEditingController),
         ),
         Expanded(
           flex: 9,

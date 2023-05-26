@@ -4,7 +4,7 @@ import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart'
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/add_key_dialog.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/add_edit_key_dialog.dart';
 
 class WordItemContextMenu extends ConsumerWidget {
   final TextEditingController textEditingController;
@@ -44,7 +44,7 @@ class WordItemContextMenu extends ConsumerWidget {
                   .whenComplete(() => showDialog(
                         context: context,
                         builder: (context) {
-                          return AddKeyDialog(
+                          return AddEditKeyDialog(
                             //scrollController: _scrollController,
                             nodeItem: nodeItem,
                             wordItemEdit: item,

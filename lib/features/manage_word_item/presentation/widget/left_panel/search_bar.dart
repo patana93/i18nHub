@@ -2,10 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/search_focus_controller.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/add_edit_node_dialog.dart';
 
 class SearchItemsBar extends ConsumerWidget {
-  final TextEditingController textEditingController;
-  const SearchItemsBar({required this.textEditingController, super.key});
+  final TextEditingController searchTextEditingController;
+  const SearchItemsBar({required this.searchTextEditingController, super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -29,7 +30,7 @@ class SearchItemsBar extends ConsumerWidget {
               flex: 10,
               child: TextField(
                 focusNode: focus,
-                controller: textEditingController,
+                controller: searchTextEditingController,
                 decoration: const InputDecoration(
                   hintText: 'Search',
                   hintStyle: TextStyle(
@@ -53,7 +54,10 @@ class SearchItemsBar extends ConsumerWidget {
                   showDialog(
                     context: context,
                     builder: (context) {
-                      final controller = TextEditingController();
+                      return AddEditNodeDialog(
+                          nodeItem: null,
+                          searchString: searchTextEditingController.text);
+                      /*    final controller = TextEditingController();
                       return AlertDialog(
                         title: const Text("Add Node"),
                         content: TextFormField(
@@ -80,7 +84,7 @@ class SearchItemsBar extends ConsumerWidget {
                               },
                               child: const Text("Save"))
                         ],
-                      );
+                      ); */
                     },
                   );
                 }),
