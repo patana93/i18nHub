@@ -42,7 +42,13 @@ class TopMenuBar extends ConsumerWidget {
             label: "Save as JSON",
             onPressed: () => ref
                 .read(contextTopMenuControllerProvider.notifier)
-                .saveJsonLanguages(),
+                .saveJsonLanguages(isWithNodes: false),
+          ),
+          MenuEntry(
+            label: "Save as JSON with nodes",
+            onPressed: () => ref
+                .read(contextTopMenuControllerProvider.notifier)
+                .saveJsonLanguages(isWithNodes: true),
           ),
           MenuEntry(
             label: "Load",

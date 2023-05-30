@@ -38,18 +38,28 @@ class ContextTopMenuController extends _$ContextTopMenuController {
     file.writeAsStringSync(jsonEncode(wordItems));
   }
 
-  void saveJsonLanguages() {
+  void saveJsonLanguages({required bool isWithNodes}) {
     final nodeItems = ref.watch(manageWordItemControllerProvider);
     final langs = ref.watch(manageLanguageControllerProvider);
 
-    final Map<String, String> result = {};
+    final Map<String, dynamic> result = {};
 
     for (var language in langs.entries) {
-      for (var nodeItem in nodeItems) {
-        for (var wordItem in nodeItem.wordItems) {
-          final transitionModel = wordItem.translations
-              .firstWhere((element) => element.language == language.key);
-          result[wordItem.key] = transitionModel.value;
+      if (isWithNodes) {
+        for (var nodeItem in nodeItems) {
+          for (var wordItem in nodeItem.wordItems) {
+            final transitionModel = wordItem.translations
+                .firstWhere((element) => element.language == language.key);
+            result[nodeItem.nodeKey] = {wordItem.key: transitionModel.value};
+          }
+        }
+      } else {
+        for (var nodeItem in nodeItems) {
+          for (var wordItem in nodeItem.wordItems) {
+            final transitionModel = wordItem.translations
+                .firstWhere((element) => element.language == language.key);
+            result[wordItem.key] = transitionModel.value;
+          }
         }
       }
 
