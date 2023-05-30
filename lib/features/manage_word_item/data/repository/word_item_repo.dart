@@ -1,3 +1,4 @@
+import 'package:i18n_app/core/utils/const.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:collection/collection.dart';
@@ -12,7 +13,7 @@ class ManageWordItemRepo {
   //          TranslationModel(language: "Spanish", value: index.toString())
   //        }));
   final List<NodeModel> nodeItems = [
-    NodeModel(nodeKey: "main", wordItems: [], isPanelExpanded: true)
+    NodeModel(nodeKey: Const.mainNodeName, wordItems: [], isPanelExpanded: true)
   ];
 
   List<NodeModel> getAllNodeItems() => nodeItems;
