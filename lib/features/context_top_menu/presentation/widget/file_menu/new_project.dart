@@ -61,7 +61,6 @@ MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
                       shrinkWrap: true,
                       itemCount: LanguagesAvailable.values.length,
                       itemBuilder: (context, index) {
-                        print(LanguagesAvailable.values[index]);
                         return ListTile(
                             onTap: () {
                               ref

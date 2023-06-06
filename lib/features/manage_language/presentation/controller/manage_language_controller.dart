@@ -18,7 +18,7 @@ class ManageLanguageController extends _$ManageLanguageController {
 
     ref
         .read(manageWordItemControllerProvider.notifier)
-        .addTranslationLanguages(newLanguage: selectedLanguage.code);
+        .addTranslationLanguages(newLanguage: selectedLanguage.name);
 
     state = [..._manageLanguageRepo.getAllLanguageSelected()];
   }

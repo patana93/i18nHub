@@ -121,14 +121,15 @@ class ContextTopMenuController extends _$ContextTopMenuController {
               .read(manageWordItemControllerProvider)
               .map((e) => e.wordItems.map((e) => e.translations))
               .expand((element) => element)
-              .toList()
-              .expand((element) => element)
-              .toList();
+              .toSet()
+              .expand((element) => element.map((e) => e.languageName))
+              .toSet();
+
           ref.read(manageLanguageControllerProvider.notifier).clear();
 
           for (final lan in languages) {
             final selectedLan = LanguagesAvailable.values
-                .firstWhere((element) => element.name == lan.languageName);
+                .firstWhere((element) => element.name == lan);
             ref.read(manageLanguageControllerProvider.notifier).addLanguage(
                 selectedLanguage: (
                   code: selectedLan.code,
