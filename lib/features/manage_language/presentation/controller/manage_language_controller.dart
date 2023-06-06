@@ -9,33 +9,32 @@ class ManageLanguageController extends _$ManageLanguageController {
   final ManageLanguageRepo _manageLanguageRepo = ManageLanguageRepo();
 
   @override
-  Map<String, String> build() {
+  List<Language> build() {
     return _manageLanguageRepo.getAllLanguageSelected();
   }
 
-  void addLanguage({required MapEntry<String, String> selectedLanguage}) async {
+  void addLanguage({required Language selectedLanguage}) async {
     _manageLanguageRepo.addLanguage(language: selectedLanguage);
 
     ref
         .read(manageWordItemControllerProvider.notifier)
-        .addTranslationLanguages(newLanguage: selectedLanguage.key);
+        .addTranslationLanguages(newLanguage: selectedLanguage.code);
 
-    state = {..._manageLanguageRepo.getAllLanguageSelected()};
+    state = [..._manageLanguageRepo.getAllLanguageSelected()];
   }
 
   void removeLanguage({required String selectedLanguage}) async {
     _manageLanguageRepo.removeLanguage(language: selectedLanguage);
-    state = {..._manageLanguageRepo.getAllLanguageSelected()};
+    state = [..._manageLanguageRepo.getAllLanguageSelected()];
   }
 
-  void resetToDefault(
-      {required MapEntry<String, String> defaultLanguage}) async {
+  void resetToDefault({required Language defaultLanguage}) async {
     _manageLanguageRepo.resetToDefault(defaultLanguage: defaultLanguage);
-    state = {..._manageLanguageRepo.getAllLanguageSelected()};
+    state = [..._manageLanguageRepo.getAllLanguageSelected()];
   }
 
   void clear() {
     _manageLanguageRepo.clear();
-    state = {};
+    state = [];
   }
 }

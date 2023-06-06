@@ -21,8 +21,8 @@ class LanguageChip extends ConsumerWidget {
       onSelected: null,
       onDeleted: () {
         final selectedLanguage = LanguagesAvailable.values
-            .firstWhere((element) => element.language == title)
-            .language;
+            .firstWhere((element) => element.name == title)
+            .name;
         ref
             .read(manageLanguageControllerProvider.notifier)
             .removeLanguage(selectedLanguage: selectedLanguage);

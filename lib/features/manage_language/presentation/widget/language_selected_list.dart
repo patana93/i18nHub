@@ -23,13 +23,13 @@ class LanguageSelectedChipList extends ConsumerWidget {
                 ? DefaultLanguageChip(
                     title: ref
                         .read(manageLanguageControllerProvider)
-                        .keys
-                        .elementAt(index))
+                        .elementAt(index)
+                        .name)
                 : LanguageChip(
                     title: ref
                         .read(manageLanguageControllerProvider)
-                        .keys
-                        .elementAt(index)),
+                        .elementAt(index)
+                        .name),
           );
         },
       ),

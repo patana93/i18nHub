@@ -75,8 +75,9 @@ class AddEditKeyDialog extends StatelessWidget {
                                 wordItem: (
                                   key: keyEditingController.text,
                                   translations: {
-                                    for (final lan in languages.keys)
-                                      TranslationModel(language: lan, value: "")
+                                    for (final lan in languages)
+                                      TranslationModel(
+                                          languageName: lan.name, value: "")
                                   }
                                 ),
                                 searchString: searchString);

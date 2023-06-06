@@ -44,12 +44,12 @@ class ContextTopMenuController extends _$ContextTopMenuController {
 
     final Map<String, dynamic> result = {};
 
-    for (var language in langs.entries) {
+    for (var language in langs) {
       if (isWithNodes) {
         for (var nodeItem in nodeItems) {
           for (var wordItem in nodeItem.wordItems) {
             final transitionModel = wordItem.translations
-                .firstWhere((element) => element.language == language.key);
+                .firstWhere((element) => element.languageName == language.name);
             if (result[nodeItem.nodeKey] == null) {
               result[nodeItem.nodeKey] = {wordItem.key: transitionModel.value};
             } else {
@@ -62,14 +62,14 @@ class ContextTopMenuController extends _$ContextTopMenuController {
         for (var nodeItem in nodeItems) {
           for (var wordItem in nodeItem.wordItems) {
             final transitionModel = wordItem.translations
-                .firstWhere((element) => element.language == language.key);
+                .firstWhere((element) => element.languageName == language.name);
             result[wordItem.key] = transitionModel.value;
           }
         }
       }
 
       final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
-      File file = File("$saveDir/${language.value}.json");
+      File file = File("$saveDir/${language.code}.json");
       file.createSync();
       file.writeAsStringSync(jsonEncode(result));
     }
@@ -128,10 +128,12 @@ class ContextTopMenuController extends _$ContextTopMenuController {
 
           for (final lan in languages) {
             final selectedLan = LanguagesAvailable.values
-                .firstWhere((element) => element.language == lan.language);
+                .firstWhere((element) => element.name == lan.languageName);
             ref.read(manageLanguageControllerProvider.notifier).addLanguage(
-                selectedLanguage:
-                    MapEntry(selectedLan.language, selectedLan.code));
+                selectedLanguage: (
+                  code: selectedLan.code,
+                  name: selectedLan.name
+                ));
           }
         }
       },

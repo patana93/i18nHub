@@ -5,12 +5,12 @@ part 'translation_model.g.dart';
 
 @JsonSerializable()
 class TranslationModel extends Equatable {
-  final String language;
+  final String languageName;
   final String value;
   final bool isEqualToDefault;
 
   const TranslationModel({
-    required this.language,
+    required this.languageName,
     required this.value,
     this.isEqualToDefault = false,
   });
@@ -22,9 +22,9 @@ class TranslationModel extends Equatable {
   Map<String, dynamic> toJson() => _$TranslationModelToJson(this);
 
   TranslationModel copyWith(
-      {String? language, String? value, bool? isEqualToDefault}) {
+      {String? languageName, String? value, bool? isEqualToDefault}) {
     return TranslationModel(
-      language: language ?? this.language,
+      languageName: languageName ?? this.languageName,
       value: value ?? this.value,
       isEqualToDefault: isEqualToDefault ?? this.isEqualToDefault,
     );
@@ -32,9 +32,9 @@ class TranslationModel extends Equatable {
 
   @override
   String toString() {
-    return "$language($isEqualToDefault) -> $value";
+    return "$languageName($isEqualToDefault) -> $value";
   }
 
   @override
-  List<Object?> get props => [language, value, isEqualToDefault];
+  List<Object?> get props => [languageName, value, isEqualToDefault];
 }

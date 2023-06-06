@@ -74,7 +74,7 @@ MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
                                   .resetToDefault(
                                       defaultLanguage: LanguagesAvailable.values
                                           .map((e) =>
-                                              MapEntry(e.language, e.code))
+                                              (code: e.code, name: e.name))
                                           .elementAt(index));
                               ref
                                   .read(
@@ -82,13 +82,12 @@ MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
                                   .makeNewProject(
                                       selectedLanguage: LanguagesAvailable
                                           .values
-                                          .map((e) => e.language)
-                                          .elementAt(index));
+                                          .elementAt(index)
+                                          .name);
 
                               Navigator.of(context).pop();
                             },
-                            title: Text(
-                                LanguagesAvailable.values[index].language));
+                            title: Text(LanguagesAvailable.values[index].name));
                       },
                     ),
                   )

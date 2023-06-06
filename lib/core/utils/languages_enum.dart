@@ -1,26 +1,14 @@
-//TODO Evalutate to use enum
-/* class Const {
-  static const Map<String, String> language = {
-    "English": "en",
-    "Italian": "it",
-    "Spanish": "es",
-    "French": "fr",
-  };
-
-
-} */
-
 enum LanguagesAvailable {
-  english(code: "en", language: "English"),
-  italian(code: "it", language: "Italian"),
-  spanish(code: "es", language: "Spanish"),
-  french(code: "fr", language: "French");
+  english(code: "en", name: "English"),
+  italian(code: "it", name: "Italian"),
+  spanish(code: "es", name: "Spanish"),
+  french(code: "fr", name: "French");
 
   const LanguagesAvailable({
     required this.code,
-    required this.language,
+    required this.name,
   });
 
   final String code;
-  final String language;
+  final String name;
 }

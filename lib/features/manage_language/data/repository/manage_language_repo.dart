@@ -1,27 +1,29 @@
 import 'package:i18n_app/core/utils/languages_enum.dart';
 
-class ManageLanguageRepo {
-  //final Set<String> languages = {"English", "French", "Italian", "Spanish"};
-  final Map<String, String> languages = {};
+typedef Language = ({String code, String name});
 
-  Map<String, String> getAllLanguageSelected() {
+class ManageLanguageRepo {
+  final List<Language> languages = [];
+
+  List<Language> getAllLanguageSelected() {
     if (languages.isEmpty) {
-      addLanguage(
-          language: MapEntry(LanguagesAvailable.english.language,
-              LanguagesAvailable.english.code));
+      addLanguage(language: (
+        code: LanguagesAvailable.english.code,
+        name: LanguagesAvailable.english.name
+      ));
     }
     return languages;
   }
 
-  void addLanguage({required MapEntry<String, String> language}) {
-    languages[language.key] = language.value;
+  void addLanguage({required Language language}) {
+    languages.add((code: language.code, name: language.name));
   }
 
   void removeLanguage({required String language}) {
-    languages.remove(language);
+    languages.removeWhere((element) => element.name == language);
   }
 
-  void resetToDefault({required MapEntry<String, String> defaultLanguage}) {
+  void resetToDefault({required Language defaultLanguage}) {
     languages.clear();
     addLanguage(language: defaultLanguage);
   }

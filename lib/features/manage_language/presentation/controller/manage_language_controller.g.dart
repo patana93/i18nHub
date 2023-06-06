@@ -7,12 +7,12 @@ part of 'manage_language_controller.dart';
 // **************************************************************************
 
 String _$manageLanguageControllerHash() =>
-    r'f12298da97ec804ba3c4a74758456c7d3b7e2a28';
+    r'36ff3937546a2e2f120a481544e47506b7205791';
 
 /// See also [ManageLanguageController].
 @ProviderFor(ManageLanguageController)
 final manageLanguageControllerProvider = AutoDisposeNotifierProvider<
-    ManageLanguageController, Map<String, String>>.internal(
+    ManageLanguageController, List<({String code, String name})>>.internal(
   ManageLanguageController.new,
   name: r'manageLanguageControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
@@ -22,5 +22,6 @@ final manageLanguageControllerProvider = AutoDisposeNotifierProvider<
   allTransitiveDependencies: null,
 );
 
-typedef _$ManageLanguageController = AutoDisposeNotifier<Map<String, String>>;
+typedef _$ManageLanguageController
+    = AutoDisposeNotifier<List<({String code, String name})>>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

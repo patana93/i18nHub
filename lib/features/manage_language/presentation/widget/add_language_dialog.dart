@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/features/manage_language/data/repository/manage_language_repo.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_app/core/utils/languages_enum.dart';
 
@@ -8,15 +9,15 @@ class AddLanaguageDialog extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final Map<String, String> languagesCurrentlyAvailable = {};
+    final List<Language> languagesCurrentlyAvailable = [];
 
     for (final languagesAvailable in LanguagesAvailable.values) {
       if (!ref
           .read(manageLanguageControllerProvider)
-          .keys
-          .contains(languagesAvailable.language)) {
-        languagesCurrentlyAvailable[languagesAvailable.language] =
-            languagesAvailable.code;
+          .map((e) => e.name)
+          .contains(languagesAvailable.name)) {
+        languagesCurrentlyAvailable.add(
+            (code: languagesAvailable.code, name: languagesAvailable.name));
       }
     }
     return Dialog(
@@ -64,19 +65,16 @@ class AddLanaguageDialog extends ConsumerWidget {
                       onTap: () {
                         ref
                             .read(manageLanguageControllerProvider.notifier)
-                            .addLanguage(
-                                selectedLanguage: MapEntry(
-                                    languagesCurrentlyAvailable.entries
-                                        .elementAt(index)
-                                        .key,
-                                    languagesCurrentlyAvailable.entries
-                                        .elementAt(index)
-                                        .value));
+                            .addLanguage(selectedLanguage: (
+                          code:
+                              languagesCurrentlyAvailable.elementAt(index).code,
+                          name:
+                              languagesCurrentlyAvailable.elementAt(index).name
+                        ));
                         Navigator.of(context).pop();
                       },
-                      title: Text(languagesCurrentlyAvailable.entries
-                          .elementAt(index)
-                          .key));
+                      title: Text(
+                          languagesCurrentlyAvailable.elementAt(index).name));
                 },
               ),
             )

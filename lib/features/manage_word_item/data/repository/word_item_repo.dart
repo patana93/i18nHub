@@ -4,14 +4,6 @@ import 'package:i18n_app/features/manage_word_item/domain/model/translation_mode
 import 'package:collection/collection.dart';
 
 class ManageWordItemRepo {
-  //final List<WordItem> wordItems = List.generate(
-  //    5500,
-  //    (index) => WordItem(key: index.toString(), translations: {
-  //          TranslationModel(language: "English", value: index.toString()),
-  //          TranslationModel(language: "French", value: index.toString()),
-  //          TranslationModel(language: "Italian", value: index.toString()),
-  //          TranslationModel(language: "Spanish", value: index.toString())
-  //        }));
   final List<NodeModel> nodeItems = [
     NodeModel(nodeKey: mainNodeName, wordItems: [], isPanelExpanded: true)
   ];
@@ -125,7 +117,7 @@ class ManageWordItemRepo {
                     key: wordItem.key,
                     translations: {
                       ...wordItem.translations,
-                      TranslationModel(language: newLanguage, value: "")
+                      TranslationModel(languageName: newLanguage, value: "")
                     }
                   )))
               .toList()));
@@ -146,7 +138,7 @@ class ManageWordItemRepo {
                   key: e.key,
                   translations: {
                     for (final translation in e.translations)
-                      if (translation.language != oldLanguage) translation
+                      if (translation.languageName != oldLanguage) translation
                   }
                 ),
               )
@@ -178,9 +170,9 @@ class ManageWordItemRepo {
         key: wordItem.key,
         translations: {
           for (final translation in wordItem.translations)
-            if (translation.language == newTranslation.language)
+            if (translation.languageName == newTranslation.languageName)
               newTranslation.copyWith(
-                  language: newTranslation.language,
+                  languageName: newTranslation.languageName,
                   value: newTranslation.value,
                   isEqualToDefault:
                       isEqualToDefault ?? translation.isEqualToDefault)

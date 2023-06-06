@@ -63,8 +63,7 @@ class TranslationList extends ConsumerWidget {
                 index: index,
                 selectedItem: selectedItem,
                 languageTextController: languageTextController,
-                selectedLanguage:
-                    selectedLanguages.keys.toList().elementAt(index),
+                selectedLanguage: selectedLanguages.elementAt(index).name,
               );
             },
           ),

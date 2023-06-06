@@ -8,14 +8,14 @@ part of 'translation_model.dart';
 
 TranslationModel _$TranslationModelFromJson(Map<String, dynamic> json) =>
     TranslationModel(
-      language: json['language'] as String,
+      languageName: json['languageName'] as String,
       value: json['value'] as String,
       isEqualToDefault: json['isEqualToDefault'] as bool? ?? false,
     );
 
 Map<String, dynamic> _$TranslationModelToJson(TranslationModel instance) =>
     <String, dynamic>{
-      'language': instance.language,
+      'languageName': instance.languageName,
       'value': instance.value,
       'isEqualToDefault': instance.isEqualToDefault,
     };

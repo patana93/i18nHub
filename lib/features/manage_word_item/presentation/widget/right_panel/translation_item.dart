@@ -41,7 +41,7 @@ class TranslationItem extends ConsumerWidget {
                           nodeItem: selectedNode!,
                           key: selectedItem.key,
                           newTranslation: TranslationModel(
-                            language: selectedLanguage,
+                            languageName: selectedLanguage,
                             value: selectedItem.translations.elementAt(0).value,
                           ),
                           isEqualToDefault: value);
@@ -75,7 +75,7 @@ class TranslationItem extends ConsumerWidget {
                   nodeItem: selectedNode!,
                   key: selectedItem.key,
                   newTranslation: TranslationModel(
-                    language: selectedLanguage,
+                    languageName: selectedLanguage,
                     value: value,
                   ));
           ref
