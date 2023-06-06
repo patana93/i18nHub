@@ -1,4 +1,3 @@
-// 1. add the necessary imports
 import 'dart:convert';
 import 'dart:io';
 
@@ -50,7 +49,12 @@ class ContextTopMenuController extends _$ContextTopMenuController {
           for (var wordItem in nodeItem.wordItems) {
             final transitionModel = wordItem.translations
                 .firstWhere((element) => element.language == language.key);
-            result[nodeItem.nodeKey] = {wordItem.key: transitionModel.value};
+            if (result[nodeItem.nodeKey] == null) {
+              result[nodeItem.nodeKey] = {wordItem.key: transitionModel.value};
+            } else {
+              (result[nodeItem.nodeKey] as Map<String, String>)
+                  .addAll({wordItem.key: transitionModel.value});
+            }
           }
         }
       } else {

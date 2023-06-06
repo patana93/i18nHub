@@ -7,7 +7,7 @@ part of 'context_top_menu_controller.dart';
 // **************************************************************************
 
 String _$contextTopMenuControllerHash() =>
-    r'c59d7ad7ef5cbbbaaf4ae32d797cb964b0814996';
+    r'fb880c3dd3a2d1622301a3c559b21a2c6d1e526b';
 
 /// See also [ContextTopMenuController].
 @ProviderFor(ContextTopMenuController)
