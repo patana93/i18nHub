@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/const.dart';
+import 'package:i18n_app/core/utils/languages_enum.dart';
 import 'package:i18n_app/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
 import 'package:i18n_app/features/context_top_menu/domain/model/menu_entry.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
@@ -59,8 +59,9 @@ MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
                   Expanded(
                     child: ListView.builder(
                       shrinkWrap: true,
-                      itemCount: Const.language.length,
+                      itemCount: LanguagesAvailable.values.length,
                       itemBuilder: (context, index) {
+                        print(LanguagesAvailable.values[index]);
                         return ListTile(
                             onTap: () {
                               ref
@@ -71,18 +72,23 @@ MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
                                   .read(
                                       manageLanguageControllerProvider.notifier)
                                   .resetToDefault(
-                                      defaultLanguage: Const.language.entries
+                                      defaultLanguage: LanguagesAvailable.values
+                                          .map((e) =>
+                                              MapEntry(e.language, e.code))
                                           .elementAt(index));
                               ref
                                   .read(
                                       contextTopMenuControllerProvider.notifier)
                                   .makeNewProject(
-                                      selectedLanguage:
-                                          Const.language.keys.elementAt(index));
+                                      selectedLanguage: LanguagesAvailable
+                                          .values
+                                          .map((e) => e.language)
+                                          .elementAt(index));
 
                               Navigator.of(context).pop();
                             },
-                            title: Text(Const.language.keys.elementAt(index)));
+                            title: Text(
+                                LanguagesAvailable.values[index].language));
                       },
                     ),
                   )

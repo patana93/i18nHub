@@ -13,7 +13,7 @@ class ManageWordItemRepo {
   //          TranslationModel(language: "Spanish", value: index.toString())
   //        }));
   final List<NodeModel> nodeItems = [
-    NodeModel(nodeKey: Const.mainNodeName, wordItems: [], isPanelExpanded: true)
+    NodeModel(nodeKey: mainNodeName, wordItems: [], isPanelExpanded: true)
   ];
 
   List<NodeModel> getAllNodeItems() => nodeItems;

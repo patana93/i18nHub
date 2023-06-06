@@ -1,11 +1,15 @@
-import 'package:i18n_app/core/utils/const.dart';
+import 'package:i18n_app/core/utils/languages_enum.dart';
 
 class ManageLanguageRepo {
   //final Set<String> languages = {"English", "French", "Italian", "Spanish"};
   final Map<String, String> languages = {};
 
   Map<String, String> getAllLanguageSelected() {
-    if (languages.isEmpty) addLanguage(language: Const.language.entries.first);
+    if (languages.isEmpty) {
+      addLanguage(
+          language: MapEntry(LanguagesAvailable.english.language,
+              LanguagesAvailable.english.code));
+    }
     return languages;
   }
 

@@ -3,6 +3,7 @@ import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:i18n_app/core/utils/const.dart';
+import 'package:i18n_app/core/utils/languages_enum.dart';
 import 'package:i18n_app/core/utils/shared_prefs.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
@@ -24,7 +25,7 @@ class ContextTopMenuController extends _$ContextTopMenuController {
         .addTranslationLanguages(newLanguage: selectedLanguage);
     ref
         .read(manageWordItemControllerProvider.notifier)
-        .addNodeItem(Const.mainNodeName);
+        .addNodeItem(mainNodeName);
   }
 
   void saveProject(String fileName) {
@@ -126,9 +127,11 @@ class ContextTopMenuController extends _$ContextTopMenuController {
           ref.read(manageLanguageControllerProvider.notifier).clear();
 
           for (final lan in languages) {
+            final selectedLan = LanguagesAvailable.values
+                .firstWhere((element) => element.language == lan.language);
             ref.read(manageLanguageControllerProvider.notifier).addLanguage(
-                selectedLanguage: Const.language.entries
-                    .firstWhere((element) => element.key == lan.language));
+                selectedLanguage:
+                    MapEntry(selectedLan.language, selectedLan.code));
           }
         }
       },

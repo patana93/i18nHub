@@ -1,4 +1,3 @@
-// 1. add the necessary imports
 import 'package:i18n_app/features/manage_language/data/repository/manage_language_repo.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
