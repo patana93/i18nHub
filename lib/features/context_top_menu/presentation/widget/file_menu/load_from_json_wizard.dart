@@ -1,0 +1,262 @@
+import 'dart:convert';
+import 'dart:io';
+
+import 'package:collection/collection.dart';
+import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/core/utils/const.dart';
+import 'package:i18n_app/core/utils/languages_enum.dart';
+import 'package:i18n_app/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
+import 'package:i18n_app/features/context_top_menu/presentation/controller/load_from_json_controller.dart';
+import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:path_provider/path_provider.dart';
+
+class LoadFromJsonWizard extends ConsumerStatefulWidget {
+  const LoadFromJsonWizard({super.key});
+
+  @override
+  ConsumerState<ConsumerStatefulWidget> createState() =>
+      _LoadFromJsonWizardState();
+}
+
+//TODO Change with external windows once Flutter deploy the feature
+class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
+  @override
+  Widget build(BuildContext context) {
+    final languages = ref.watch(loadFromJsonControllerProvider);
+    return AlertDialog(
+      title: const Text("Load form Json wizard"),
+      content: Column(
+        children: [
+          const Text("data"),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              const Text("File list"),
+              ElevatedButton(
+                  onPressed: () async {
+                    FilePickerResult? result = await FilePicker.platform
+                        .pickFiles(
+                            lockParentWindow: true,
+                            type: FileType.custom,
+                            allowedExtensions: ["json"]);
+                    List<File>? files;
+                    if (result != null) {
+                      files =
+                          result.paths.map((path) => File(path ?? "")).toList();
+                    } else {
+                      return;
+                    }
+
+                    ref
+                        .read(loadFromJsonControllerProvider.notifier)
+                        .loadLanguage(files.first.path);
+                    setState(() {});
+                  },
+                  child: const Text("Add")),
+            ],
+          ),
+          Expanded(
+            child: SizedBox(
+              width: 400,
+              child: ListView.builder(
+                itemCount: languages.length,
+                itemBuilder: (context, index) => ListTile(
+                    title: Text(languages[index]),
+                    trailing: IconButton(
+                      icon: const Icon(Icons.delete),
+                      onPressed: () => setState(() {
+                        ref
+                            .read(loadFromJsonControllerProvider.notifier)
+                            .removeLanguage(languages[index]);
+                      }),
+                    ),
+                    subtitle: RichText(
+                      text: TextSpan(
+                        text: "Language detected: ",
+                        style: Theme.of(context).textTheme.bodyMedium,
+                        children: [
+                          TextSpan(
+                            text: _getLanguage(
+                              languages[index].substring(
+                                languages[index].lastIndexOf("\\") + 1,
+                                languages[index].lastIndexOf("."),
+                              ),
+                            ),
+                          ),
+                          index == 0
+                              ? const TextSpan(
+                                  text: "\nMain Language",
+                                  style: TextStyle(fontWeight: FontWeight.bold))
+                              : const TextSpan(),
+                        ],
+                      ),
+                    )),
+              ),
+            ),
+          )
+        ],
+      ),
+      actions: [
+        ElevatedButton(
+          onPressed: () => Navigator.of(context).pop(),
+          child: const Text("Cancel"),
+        ),
+        ElevatedButton(
+          onPressed: () async {
+            final languagesAvailable =
+                LanguagesAvailable.values.firstWhere((element) =>
+                    element.name ==
+                    _getLanguage(
+                      languages.first.substring(
+                        languages.first.lastIndexOf("\\") + 1,
+                        languages.first.lastIndexOf("."),
+                      ),
+                    ));
+
+            ref
+                .read(selectionWordItemControllerProvider.notifier)
+                .selectWordItem(null, null);
+            ref.read(manageLanguageControllerProvider.notifier).resetToDefault(
+                defaultLanguage: (
+                  code: languagesAvailable.code,
+                  name: languagesAvailable.name
+                ));
+            ref.read(contextTopMenuControllerProvider.notifier).makeNewProject(
+                    selectedLanguage: _getLanguage(
+                  languages.first.substring(
+                    languages.first.lastIndexOf("\\") + 1,
+                    languages.first.lastIndexOf("."),
+                  ),
+                ));
+
+            ref.read(manageWordItemControllerProvider.notifier).clearAll();
+            ref.read(manageLanguageControllerProvider.notifier).clear();
+            final List<NodeModel> nodeItemList = [];
+            for (var lil in languages) {
+              await getApplicationDocumentsDirectory().then(
+                (Directory directory) {
+                  final dir = lil;
+
+                  final jsonFile = File(dir);
+                  final fileExist = jsonFile.existsSync();
+                  if (fileExist) {
+                    final Map<String, dynamic> fileContent =
+                        jsonDecode(jsonFile.readAsStringSync());
+
+                    nodeItemList
+                        .add(NodeModel(nodeKey: mainNodeName, wordItems: [
+                      for (var item in fileContent.entries)
+                        (
+                          key: item.key,
+                          translations: {
+                            TranslationModel(
+                                languageName: _getLanguage(
+                                  lil.substring(
+                                    lil.lastIndexOf("\\") + 1,
+                                    lil.lastIndexOf("."),
+                                  ),
+                                ),
+                                value: item.value)
+                          }
+                        )
+                    ]));
+                  }
+                },
+              );
+            }
+
+            print("nodeItemList ${nodeItemList.map((e) => e.nodeKey)}");
+
+            ref
+                .read(manageWordItemControllerProvider.notifier)
+                .addNodeItem(mainNodeName);
+            final Set<String> alreadyWordItemKey = {};
+            final Set<String> alreadyLang = {};
+            for (final nodeItem in nodeItemList) {
+              print("nodeKey: ${nodeItem.nodeKey}");
+
+              for (final wordItem in nodeItem.wordItems) {
+                print("wordItem: $wordItem");
+
+                if (!alreadyLang
+                    .contains(wordItem.translations.first.languageName)) {
+                  ref
+                      .read(manageLanguageControllerProvider.notifier)
+                      .addLanguage(selectedLanguage: (
+                    code: _getLanguageCode(
+                        wordItem.translations.first.languageName),
+                    name: wordItem.translations.first.languageName
+                  ));
+                }
+
+                alreadyLang.add(wordItem.translations.first.languageName);
+
+                print(
+                    "code: ${_getLanguageCode(wordItem.translations.first.languageName)}");
+                if (!alreadyWordItemKey.contains(wordItem.key)) {
+                  print("add: $wordItem");
+                  ref
+                      .read(manageWordItemControllerProvider.notifier)
+                      .addWordItem(nodeItem: nodeItem, wordItem: wordItem);
+                } else {
+                  for (final translation in wordItem.translations) {
+                    print("edit translation: $translation");
+
+                    ref
+                        .read(manageWordItemControllerProvider.notifier)
+                        .editWordTranslation(
+                            nodeItem: nodeItem,
+                            key: wordItem.key,
+                            newTranslation: translation);
+                  }
+                }
+                alreadyWordItemKey.add(wordItem.key);
+              }
+            }
+
+            print(
+                "res: ${ref.read(manageWordItemControllerProvider).map((e) => e.wordItems)}");
+
+            /*  final languages2 = ref
+                .read(manageWordItemControllerProvider)
+                .map((e) => e.wordItems.map((e) => e.translations))
+                .expand((element) => element)
+                .toSet()
+                .expand((element) => element.map((e) => e.languageName))
+                .toSet();
+
+            for (final lan in languages2) {
+              final selectedLan = LanguagesAvailable.values
+                  .firstWhere((element) => element.name == lan);
+              ref.read(manageLanguageControllerProvider.notifier).addLanguage(
+                  selectedLanguage: (
+                    code: selectedLan.code,
+                    name: selectedLan.name
+                  ),
+                  isAddTranslationLanguagesRequired: false); 
+            }*/
+          },
+          child: const Text("Load"),
+        )
+      ],
+    );
+  }
+
+  String _getLanguage(String languageCode) =>
+      LanguagesAvailable.values
+          .firstWhereOrNull((element) => element.code == languageCode)
+          ?.name ??
+      "Invalid file";
+
+  String _getLanguageCode(String languageName) =>
+      LanguagesAvailable.values
+          .firstWhereOrNull((element) => element.name == languageName)
+          ?.code ??
+      "Invalid file";
+}

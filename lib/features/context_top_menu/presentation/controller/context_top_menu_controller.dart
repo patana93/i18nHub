@@ -118,11 +118,6 @@ class ContextTopMenuController extends _$ContextTopMenuController {
             }
           }
 
-          final aa = ref.read(manageWordItemControllerProvider);
-          for (var i in aa) {
-            print("aaaaaaaaaaaa: ${i.wordItems}");
-          }
-
           final languages = ref
               .read(manageWordItemControllerProvider)
               .map((e) => e.wordItems.map((e) => e.translations))

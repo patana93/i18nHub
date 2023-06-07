@@ -1,26 +1,26 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'manage_word_item_controller.dart';
+part of 'load_from_json_controller.dart';
 
 // **************************************************************************
 // RiverpodGenerator
 // **************************************************************************
 
-String _$manageWordItemControllerHash() =>
-    r'7bfe85153933ca5b0ce00481bd0aac23eedf0fc6';
+String _$loadFromJsonControllerHash() =>
+    r'6b3ff9ee2354924ba0df4ce1a2fa82767a11f765';
 
-/// See also [ManageWordItemController].
-@ProviderFor(ManageWordItemController)
-final manageWordItemControllerProvider = AutoDisposeNotifierProvider<
-    ManageWordItemController, List<NodeModel>>.internal(
-  ManageWordItemController.new,
-  name: r'manageWordItemControllerProvider',
+/// See also [LoadFromJsonController].
+@ProviderFor(LoadFromJsonController)
+final loadFromJsonControllerProvider =
+    AutoDisposeNotifierProvider<LoadFromJsonController, List<String>>.internal(
+  LoadFromJsonController.new,
+  name: r'loadFromJsonControllerProvider',
   debugGetCreateSourceHash: const bool.fromEnvironment('dart.vm.product')
       ? null
-      : _$manageWordItemControllerHash,
+      : _$loadFromJsonControllerHash,
   dependencies: null,
   allTransitiveDependencies: null,
 );
 
-typedef _$ManageWordItemController = AutoDisposeNotifier<List<NodeModel>>;
+typedef _$LoadFromJsonController = AutoDisposeNotifier<List<String>>;
 // ignore_for_file: unnecessary_raw_strings, subtype_of_sealed_class, invalid_use_of_internal_member, do_not_use_environment, prefer_const_constructors, public_member_api_docs, avoid_private_typedef_functions

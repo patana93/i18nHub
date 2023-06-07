@@ -15,6 +15,7 @@ class ManageWordItemRepo {
 
   void addNodeItem(
       {required String nodeKey, List<WordItem>? wordItem, bool? isExpanded}) {
+    if (nodeItems.map((e) => e.nodeKey).contains(nodeKey)) return;
     nodeItems.add(NodeModel(
         nodeKey: nodeKey,
         wordItems: wordItem ?? [],
@@ -39,7 +40,6 @@ class ManageWordItemRepo {
   }
 
   void addWordItem({required String nodeKey, required WordItem wordItem}) {
-    print("bbb $wordItem");
     nodeItems
         .firstWhere((element) => element.nodeKey == nodeKey)
         .wordItems
@@ -103,7 +103,8 @@ class ManageWordItemRepo {
     return filteredData;
   }
 
-  void addTranslationLanguages({required String newLanguage}) {
+  void addTranslationLanguages(
+      {required String newLanguage, TranslationModel? translationModel}) {
     final List<NodeModel> tempList = [];
     tempList.addAll(nodeItems);
 
@@ -118,7 +119,8 @@ class ManageWordItemRepo {
                     key: wordItem.key,
                     translations: {
                       ...wordItem.translations,
-                      TranslationModel(languageName: newLanguage, value: "")
+                      translationModel ??
+                          TranslationModel(languageName: newLanguage, value: "")
                     }
                   )))
               .toList()));

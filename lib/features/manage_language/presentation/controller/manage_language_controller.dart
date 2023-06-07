@@ -17,7 +17,7 @@ class ManageLanguageController extends _$ManageLanguageController {
       {required Language selectedLanguage,
       bool isAddTranslationLanguagesRequired = true}) async {
     _manageLanguageRepo.addLanguage(language: selectedLanguage);
-    print(isAddTranslationLanguagesRequired);
+
     if (isAddTranslationLanguagesRequired) {
       ref
           .read(manageWordItemControllerProvider.notifier)

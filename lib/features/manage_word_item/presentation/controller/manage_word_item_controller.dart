@@ -85,8 +85,11 @@ class ManageWordItemController extends _$ManageWordItemController {
       _manageWordItemRepo.checkNodeItemKeyAlreadyExist(key: key.toLowerCase());
 
   void addTranslationLanguages(
-      {required String newLanguage, String? searchString}) {
-    _manageWordItemRepo.addTranslationLanguages(newLanguage: newLanguage);
+      {required String newLanguage,
+      TranslationModel? translationModel,
+      String? searchString}) {
+    _manageWordItemRepo.addTranslationLanguages(
+        newLanguage: newLanguage, translationModel: translationModel);
     state = [..._manageWordItemRepo.filterData(searchString ?? "")];
     final selectedWordItem = ref.read(selectionWordItemControllerProvider);
     final selectedNodeitem =
