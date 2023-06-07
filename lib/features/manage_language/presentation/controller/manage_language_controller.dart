@@ -13,12 +13,16 @@ class ManageLanguageController extends _$ManageLanguageController {
     return _manageLanguageRepo.getAllLanguageSelected();
   }
 
-  void addLanguage({required Language selectedLanguage}) async {
+  void addLanguage(
+      {required Language selectedLanguage,
+      bool isAddTranslationLanguagesRequired = true}) async {
     _manageLanguageRepo.addLanguage(language: selectedLanguage);
-
-    ref
-        .read(manageWordItemControllerProvider.notifier)
-        .addTranslationLanguages(newLanguage: selectedLanguage.name);
+    print(isAddTranslationLanguagesRequired);
+    if (isAddTranslationLanguagesRequired) {
+      ref
+          .read(manageWordItemControllerProvider.notifier)
+          .addTranslationLanguages(newLanguage: selectedLanguage.name);
+    }
 
     state = [..._manageLanguageRepo.getAllLanguageSelected()];
   }

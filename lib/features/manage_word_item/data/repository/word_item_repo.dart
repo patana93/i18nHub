@@ -39,6 +39,7 @@ class ManageWordItemRepo {
   }
 
   void addWordItem({required String nodeKey, required WordItem wordItem}) {
+    print("bbb $wordItem");
     nodeItems
         .firstWhere((element) => element.nodeKey == nodeKey)
         .wordItems
