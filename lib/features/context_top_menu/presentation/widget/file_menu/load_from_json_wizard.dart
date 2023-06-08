@@ -1,7 +1,6 @@
 import 'dart:convert';
 import 'dart:io';
 
-import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -82,7 +81,7 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                         style: Theme.of(context).textTheme.bodyMedium,
                         children: [
                           TextSpan(
-                            text: _getLanguage(
+                            text: LanguagesAvailable.getLanguageName(
                               languages[index].substring(
                                 languages[index].lastIndexOf("\\") + 1,
                                 languages[index].lastIndexOf("."),
@@ -112,7 +111,7 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
             final languagesAvailable =
                 LanguagesAvailable.values.firstWhere((element) =>
                     element.name ==
-                    _getLanguage(
+                    LanguagesAvailable.getLanguageName(
                       languages.first.substring(
                         languages.first.lastIndexOf("\\") + 1,
                         languages.first.lastIndexOf("."),
@@ -128,7 +127,7 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                   name: languagesAvailable.name
                 ));
             ref.read(contextTopMenuControllerProvider.notifier).makeNewProject(
-                    selectedLanguage: _getLanguage(
+                    selectedLanguage: LanguagesAvailable.getLanguageName(
                   languages.first.substring(
                     languages.first.lastIndexOf("\\") + 1,
                     languages.first.lastIndexOf("."),
@@ -156,7 +155,8 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                           key: item.key,
                           translations: {
                             TranslationModel(
-                                languageName: _getLanguage(
+                                languageName:
+                                    LanguagesAvailable.getLanguageName(
                                   lil.substring(
                                     lil.lastIndexOf("\\") + 1,
                                     lil.lastIndexOf("."),
@@ -171,25 +171,19 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
               );
             }
 
-            print("nodeItemList ${nodeItemList.map((e) => e.nodeKey)}");
-
             ref
                 .read(manageWordItemControllerProvider.notifier)
                 .addNodeItem(mainNodeName);
             final Set<String> alreadyWordItemKey = {};
             final Set<String> alreadyLang = {};
             for (final nodeItem in nodeItemList) {
-              print("nodeKey: ${nodeItem.nodeKey}");
-
               for (final wordItem in nodeItem.wordItems) {
-                print("wordItem: $wordItem");
-
                 if (!alreadyLang
                     .contains(wordItem.translations.first.languageName)) {
                   ref
                       .read(manageLanguageControllerProvider.notifier)
                       .addLanguage(selectedLanguage: (
-                    code: _getLanguageCode(
+                    code: LanguagesAvailable.getLanguageCode(
                         wordItem.translations.first.languageName),
                     name: wordItem.translations.first.languageName
                   ));
@@ -197,17 +191,12 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
 
                 alreadyLang.add(wordItem.translations.first.languageName);
 
-                print(
-                    "code: ${_getLanguageCode(wordItem.translations.first.languageName)}");
                 if (!alreadyWordItemKey.contains(wordItem.key)) {
-                  print("add: $wordItem");
                   ref
                       .read(manageWordItemControllerProvider.notifier)
                       .addWordItem(nodeItem: nodeItem, wordItem: wordItem);
                 } else {
                   for (final translation in wordItem.translations) {
-                    print("edit translation: $translation");
-
                     ref
                         .read(manageWordItemControllerProvider.notifier)
                         .editWordTranslation(
@@ -219,44 +208,10 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                 alreadyWordItemKey.add(wordItem.key);
               }
             }
-
-            print(
-                "res: ${ref.read(manageWordItemControllerProvider).map((e) => e.wordItems)}");
-
-            /*  final languages2 = ref
-                .read(manageWordItemControllerProvider)
-                .map((e) => e.wordItems.map((e) => e.translations))
-                .expand((element) => element)
-                .toSet()
-                .expand((element) => element.map((e) => e.languageName))
-                .toSet();
-
-            for (final lan in languages2) {
-              final selectedLan = LanguagesAvailable.values
-                  .firstWhere((element) => element.name == lan);
-              ref.read(manageLanguageControllerProvider.notifier).addLanguage(
-                  selectedLanguage: (
-                    code: selectedLan.code,
-                    name: selectedLan.name
-                  ),
-                  isAddTranslationLanguagesRequired: false); 
-            }*/
           },
           child: const Text("Load"),
         )
       ],
     );
   }
-
-  String _getLanguage(String languageCode) =>
-      LanguagesAvailable.values
-          .firstWhereOrNull((element) => element.code == languageCode)
-          ?.name ??
-      "Invalid file";
-
-  String _getLanguageCode(String languageName) =>
-      LanguagesAvailable.values
-          .firstWhereOrNull((element) => element.name == languageName)
-          ?.code ??
-      "Invalid file";
 }
