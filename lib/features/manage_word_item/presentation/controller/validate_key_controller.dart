@@ -3,6 +3,8 @@ import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'validate_key_controller.g.dart';
 
+enum TypeValidation { node, wordItem }
+
 @riverpod
 class ValidateKeyController extends _$ValidateKeyController {
   @override
@@ -10,7 +12,7 @@ class ValidateKeyController extends _$ValidateKeyController {
     return "";
   }
 
-  validate(String? value) {
+  validate(String? value, TypeValidation typeValidation) {
     if (value == null || value.isEmpty) {
       state = "Enter a valid key";
       return;
@@ -27,9 +29,17 @@ class ValidateKeyController extends _$ValidateKeyController {
       state = "Key cannot contain special characters or space";
       return;
     }
-    if (ref
-        .read(manageWordItemControllerProvider.notifier)
-        .checkWordItemKeyAlreadyExist(key: value)) {
+    if (typeValidation == TypeValidation.node &&
+        ref
+            .read(manageWordItemControllerProvider.notifier)
+            .checkWordItemKeyAlreadyExist(key: value)) {
+      state = "Key already used";
+      return;
+    }
+    if (typeValidation == TypeValidation.wordItem &&
+        ref
+            .read(manageWordItemControllerProvider.notifier)
+            .checkNodeItemKeyAlreadyExist(key: value)) {
       state = "Key already used";
       return;
     }

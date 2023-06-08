@@ -40,7 +40,9 @@ class AddEditKeyDialog extends StatelessWidget {
             return errorMessage;
           },
           onChanged: (value) {
-            ref.read(validateKeyControllerProvider.notifier).validate(value);
+            ref
+                .read(validateKeyControllerProvider.notifier)
+                .validate(value, TypeValidation.node);
           },
           controller: keyEditingController,
           decoration: const InputDecoration(

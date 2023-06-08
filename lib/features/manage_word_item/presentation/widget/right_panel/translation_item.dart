@@ -23,43 +23,47 @@ class TranslationItem extends ConsumerWidget {
     final selectedNode =
         ref.read(selectionWordItemControllerProvider.notifier).selectedNode;
     return ListTile(
-      trailing: Visibility(
-        visible: index != 0 && selectedNode != null,
-        child: Column(
-          children: [
-            Expanded(
-              child: Switch(
-                value: selectedItem.translations.isEmpty
-                    ? false
-                    : selectedItem.translations
-                        .elementAt(index)
-                        .isEqualToDefault,
-                onChanged: (value) {
-                  ref
-                      .read(manageWordItemControllerProvider.notifier)
-                      .editWordTranslation(
-                          nodeItem: selectedNode!,
-                          key: selectedItem.key,
-                          newTranslation: TranslationModel(
-                            languageName: selectedLanguage,
-                            value: selectedItem.translations.elementAt(0).value,
-                          ),
-                          isEqualToDefault: value);
-                },
-              ),
-            ),
-            const Expanded(
-              child: FittedBox(
-                fit: BoxFit.contain,
-                child: Text(
-                  "Copy\nDefault",
-                  textAlign: TextAlign.center,
+      trailing: index != 0 && selectedNode != null
+          ? Column(
+              children: [
+                Expanded(
+                  child: Switch(
+                    value: selectedItem.translations.isEmpty
+                        ? false
+                        : selectedItem.translations
+                            .elementAt(index)
+                            .isEqualToDefault,
+                    onChanged: (value) {
+                      ref
+                          .read(manageWordItemControllerProvider.notifier)
+                          .editWordTranslation(
+                              nodeItem: selectedNode,
+                              key: selectedItem.key,
+                              newTranslation: TranslationModel(
+                                languageName: selectedLanguage,
+                                value: selectedItem.translations
+                                    .elementAt(0)
+                                    .value,
+                              ),
+                              isEqualToDefault: value);
+                    },
+                  ),
                 ),
-              ),
+                const Expanded(
+                  child: FittedBox(
+                    fit: BoxFit.contain,
+                    child: Text(
+                      "Copy\nmain",
+                      textAlign: TextAlign.center,
+                    ),
+                  ),
+                )
+              ],
             )
-          ],
-        ),
-      ),
+          : const Text(
+              "Main\nlanguage",
+              textAlign: TextAlign.center,
+            ),
       title: TextField(
         keyboardType: TextInputType.multiline,
         maxLines: null,

@@ -34,10 +34,37 @@ class ExpansionHeader extends ConsumerWidget {
             icon: const Icon(Icons.add)),
         IconButton(
             onPressed: () {
-              //TODO ADD ALERT TO CONFIRM
-              ref
-                  .read(manageWordItemControllerProvider.notifier)
-                  .removeNodeItem(nodeItem.nodeKey);
+              showDialog(
+                context: context,
+                builder: (context) => AlertDialog(
+                  title: const Text("Are you sure?"),
+                  content: RichText(
+                    text: TextSpan(
+                        style: DefaultTextStyle.of(context).style,
+                        children: [
+                          const TextSpan(text: "You are deleting "),
+                          TextSpan(
+                              text: nodeItem.nodeKey,
+                              style:
+                                  const TextStyle(fontWeight: FontWeight.bold)),
+                          const TextSpan(text: " node and all its elements"),
+                        ]),
+                  ),
+                  actions: [
+                    ElevatedButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text("Cancel")),
+                    ElevatedButton(
+                        onPressed: () {
+                          ref
+                              .read(manageWordItemControllerProvider.notifier)
+                              .removeNodeItem(nodeItem.nodeKey);
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text("Confirm")),
+                  ],
+                ),
+              );
             },
             icon: const Icon(Icons.remove)),
         IconButton(

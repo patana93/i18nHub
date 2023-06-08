@@ -33,33 +33,65 @@ class TopMenuBar extends ConsumerWidget {
         label: 'File',
         menuChildren: <MenuEntry>[
           getNewProjectMenu(context, ref),
-          //TODO ADD DIALOG TO SET THE FILENAME
           MenuEntry(
-            label: "Save",
-            onPressed: () => ref
-                .read(contextTopMenuControllerProvider.notifier)
-                .saveProject("fileName"),
-          ),
+              label: "Save Project",
+              onPressed: () => showDialog(
+                  context: context,
+                  builder: (context) {
+                    final controller = TextEditingController();
+                    final formKey = GlobalKey<FormState>();
+                    return AlertDialog(
+                      title: const Text("File name"),
+                      content: Form(
+                        key: formKey,
+                        child: TextFormField(
+                          controller: controller,
+                          validator: (value) {
+                            if (value != null && value.isEmpty) {
+                              return "File name cannot be empty";
+                            }
+                            return null;
+                          },
+                        ),
+                      ),
+                      actions: [
+                        ElevatedButton(
+                            onPressed: () => Navigator.of(context).pop(),
+                            child: const Text("Cancel")),
+                        ElevatedButton(
+                            onPressed: () {
+                              if (formKey.currentState?.validate() == true) {
+                                ref
+                                    .read(contextTopMenuControllerProvider
+                                        .notifier)
+                                    .saveProject(controller.text);
+                                Navigator.of(context).pop();
+                              }
+                            },
+                            child: const Text("Confirm")),
+                      ],
+                    );
+                  })),
           MenuEntry(
-            label: "Save as JSON",
+            label: "Save as JSONs",
             onPressed: () => ref
                 .read(contextTopMenuControllerProvider.notifier)
                 .saveJsonLanguages(isWithNodes: false),
           ),
           MenuEntry(
-            label: "Save as JSON with nodes",
+            label: "Save as JSONs with nodes",
             onPressed: () => ref
                 .read(contextTopMenuControllerProvider.notifier)
                 .saveJsonLanguages(isWithNodes: true),
           ),
           MenuEntry(
-            label: "Load",
+            label: "Load project",
             onPressed: () => ref
                 .read(contextTopMenuControllerProvider.notifier)
                 .loadProject(),
           ),
           MenuEntry(
-            label: "Load from JSON",
+            label: "Load from JSONs",
             onPressed: () => showDialog(
               barrierDismissible: false,
               context: context,
