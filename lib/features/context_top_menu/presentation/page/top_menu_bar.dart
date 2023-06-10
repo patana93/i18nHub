@@ -4,6 +4,7 @@ import 'package:i18n_app/features/context_top_menu/presentation/controller/conte
 import 'package:i18n_app/features/context_top_menu/presentation/widget/file_menu/load_from_json_wizard.dart';
 import 'package:i18n_app/features/context_top_menu/presentation/widget/file_menu/new_project.dart';
 import 'package:i18n_app/features/context_top_menu/domain/model/menu_entry.dart';
+import 'package:i18n_app/features/context_top_menu/presentation/widget/file_menu/save_project.dart';
 import 'package:i18n_app/features/context_top_menu/presentation/widget/settings_menu/select_save_path.dart';
 
 class TopMenuBar extends ConsumerWidget {
@@ -37,41 +38,7 @@ class TopMenuBar extends ConsumerWidget {
               label: "Save Project",
               onPressed: () => showDialog(
                   context: context,
-                  builder: (context) {
-                    final controller = TextEditingController();
-                    final formKey = GlobalKey<FormState>();
-                    return AlertDialog(
-                      title: const Text("File name"),
-                      content: Form(
-                        key: formKey,
-                        child: TextFormField(
-                          controller: controller,
-                          validator: (value) {
-                            if (value != null && value.isEmpty) {
-                              return "File name cannot be empty";
-                            }
-                            return null;
-                          },
-                        ),
-                      ),
-                      actions: [
-                        ElevatedButton(
-                            onPressed: () => Navigator.of(context).pop(),
-                            child: const Text("Cancel")),
-                        ElevatedButton(
-                            onPressed: () {
-                              if (formKey.currentState?.validate() == true) {
-                                ref
-                                    .read(contextTopMenuControllerProvider
-                                        .notifier)
-                                    .saveProject(controller.text);
-                                Navigator.of(context).pop();
-                              }
-                            },
-                            child: const Text("Confirm")),
-                      ],
-                    );
-                  })),
+                  builder: (context) => const SaveProjectDialog())),
           MenuEntry(
             label: "Save as JSONs",
             onPressed: () => ref
