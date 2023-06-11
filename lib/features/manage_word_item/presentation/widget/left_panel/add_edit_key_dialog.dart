@@ -73,16 +73,16 @@ class AddEditKeyDialog extends StatelessWidget {
                         ref
                             .read(manageWordItemControllerProvider.notifier)
                             .addWordItem(
-                                nodeItem: nodeItem,
-                                wordItem: (
-                                  key: keyEditingController.text,
-                                  translations: {
-                                    for (final lan in languages)
-                                      TranslationModel(
-                                          languageName: lan.name, value: "")
-                                  }
-                                ),
-                                searchString: searchString);
+                          nodeItem: nodeItem,
+                          wordItem: (
+                            key: keyEditingController.text,
+                            translations: {
+                              for (final lan in languages)
+                                TranslationModel(
+                                    languageName: lan.name, value: "")
+                            }
+                          ),
+                        );
                       } else {
                         ref
                             .read(manageWordItemControllerProvider.notifier)

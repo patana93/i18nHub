@@ -73,13 +73,12 @@ class WordItemContextMenu extends ConsumerWidget {
               }
 
               ref.read(manageWordItemControllerProvider.notifier).addWordItem(
-                    nodeItem: nodeItem,
-                    wordItem: (
-                      key: copyKey,
-                      translations: newTranslations,
-                    ),
-                    searchString: textEditingController.text,
-                  );
+                nodeItem: nodeItem,
+                wordItem: (
+                  key: copyKey,
+                  translations: newTranslations,
+                ),
+              );
             },
           ),
           PopupMenuItem(
@@ -93,12 +92,12 @@ class WordItemContextMenu extends ConsumerWidget {
               }
 
               ref.read(manageWordItemControllerProvider.notifier).addWordItem(
-                  nodeItem: nodeItem,
-                  wordItem: (
-                    key: duplicate,
-                    translations: item.translations,
-                  ),
-                  searchString: textEditingController.text);
+                nodeItem: nodeItem,
+                wordItem: (
+                  key: duplicate,
+                  translations: item.translations,
+                ),
+              );
             },
           )
         ];

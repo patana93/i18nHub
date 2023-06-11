@@ -2,6 +2,7 @@ import 'package:collection/collection.dart';
 import 'package:i18n_app/features/manage_word_item/data/repository/word_item_repo.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
+import 'package:i18n_app/features/manage_word_item/presentation/controller/search_text_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
@@ -18,18 +19,19 @@ class ManageWordItemController extends _$ManageWordItemController {
 
   NodeModel? getNodeItem(String? key) => _manageWordItemRepo.getNodeItem(key);
 
-  filterData(String searchString) {
-    state = _manageWordItemRepo.filterData(searchString);
+  filterData() {
+    final searchText = ref.watch(searchTextControllerProvider);
+    state = _manageWordItemRepo.filterData(searchText ?? "");
   }
 
   void addNodeItem(String nodeKey) {
     _manageWordItemRepo.addNodeItem(nodeKey: nodeKey);
-    state = [..._manageWordItemRepo.getAllNodeItems()];
+    filterData();
   }
 
   void removeNodeItem(String nodeKey) {
     _manageWordItemRepo.removeNodeItem(nodeKey);
-    state = [..._manageWordItemRepo.getAllNodeItems()];
+    filterData();
     ref
         .read(selectionWordItemControllerProvider.notifier)
         .selectWordItem(null, null);
@@ -39,17 +41,14 @@ class ManageWordItemController extends _$ManageWordItemController {
       {required String nodeKey, required String newNodeKey, bool? isExpanded}) {
     _manageWordItemRepo.editNodeItem(
         nodeKey: nodeKey, newNodeKey: newNodeKey, isExpanded: isExpanded);
-    state = [..._manageWordItemRepo.getAllNodeItems()];
+    filterData();
   }
 
   void addWordItem(
-      {required NodeModel nodeItem,
-      required WordItem wordItem,
-      String? searchString}) async {
+      {required NodeModel nodeItem, required WordItem wordItem}) async {
     _manageWordItemRepo.addWordItem(
         nodeKey: nodeItem.nodeKey, wordItem: wordItem);
-    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
-
+    filterData();
     ref
         .read(selectionWordItemControllerProvider.notifier)
         .selectWordItem(nodeItem, wordItem);
@@ -60,7 +59,7 @@ class ManageWordItemController extends _$ManageWordItemController {
       required String key,
       String? searchString}) async {
     _manageWordItemRepo.removeWordItem(nodeKey: nodeKey, key: key);
-    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
+    filterData();
   }
 
   void editWordItemKey(
@@ -70,7 +69,7 @@ class ManageWordItemController extends _$ManageWordItemController {
       String? searchString}) async {
     _manageWordItemRepo.editWordItemKey(
         nodeKey: newNodeItem.nodeKey, oldKey: oldKey, newWordItem: newWordItem);
-    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
+    filterData();
     ref.read(selectionWordItemControllerProvider.notifier).selectWordItem(
         newNodeItem,
         getNodeItem(newNodeItem.nodeKey)
@@ -90,7 +89,7 @@ class ManageWordItemController extends _$ManageWordItemController {
       String? searchString}) {
     _manageWordItemRepo.addTranslationLanguages(
         newLanguage: newLanguage, translationModel: translationModel);
-    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
+    filterData();
     final selectedWordItem = ref.read(selectionWordItemControllerProvider);
     final selectedNodeitem =
         ref.read(selectionWordItemControllerProvider.notifier).selectedNode;
@@ -120,7 +119,7 @@ class ManageWordItemController extends _$ManageWordItemController {
       isEqualToDefault: isEqualToDefault,
     );
 
-    state = [..._manageWordItemRepo.getAllNodeItems()];
+    filterData();
     ref.read(selectionWordItemControllerProvider.notifier).selectWordItem(
         nodeItem,
         getNodeItem(nodeItem.nodeKey)
