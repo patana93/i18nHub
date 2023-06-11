@@ -21,7 +21,7 @@ class ManageWordItemController extends _$ManageWordItemController {
 
   filterData() {
     final searchText = ref.watch(searchTextControllerProvider);
-    state = _manageWordItemRepo.filterData(searchText ?? "");
+    state = [..._manageWordItemRepo.filterData(searchText ?? "")];
   }
 
   void addNodeItem(String nodeKey) {
