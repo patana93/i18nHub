@@ -7,17 +7,12 @@ class ManageLanguagePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Expanded(
-        flex: 8,
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            SizedBox(
-              width: 10,
-            ),
-            Expanded(flex: 75, child: LanguageSelectedChipList()),
-            Expanded(flex: 15, child: AddLanguageActionChip()),
-          ],
-        ));
+    return const Row(
+      children: [
+        Expanded(flex: 80, child: LanguageSelectedChipList()),
+        Spacer(),
+        Flexible(flex: 20, child: AddLanguageActionChip()),
+      ],
+    );
   }
 }

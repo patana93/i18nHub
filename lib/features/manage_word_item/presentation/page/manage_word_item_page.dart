@@ -22,7 +22,7 @@ class ManageWordItemPage extends StatelessWidget {
               child: Column(
                 children: [
                   Expanded(flex: 92, child: RightPanel()),
-                  ManageLanguagePage()
+                  Expanded(flex: 8, child: ManageLanguagePage())
                 ],
               ))
         ],

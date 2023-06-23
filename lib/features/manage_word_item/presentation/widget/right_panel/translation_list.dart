@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_app/core/controller/text_cursor_position.dart';
+import 'package:i18n_app/core/utils/colors.dart';
 import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/widget/right_panel/translation_item.dart';
@@ -15,11 +16,23 @@ class TranslationList extends ConsumerWidget {
     return Column(
       children: [
         Flexible(
-          flex: 1,
-          child: Text(selectedItem.key),
+          flex: 10,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 8.0),
+            child: Text(
+              selectedItem.key,
+              style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                  color: I18nColor.blue, fontWeight: FontWeight.bold),
+            ),
+          ),
         ),
+        const Expanded(
+            flex: 5,
+            child: SizedBox(
+              height: 1,
+            )),
         Expanded(
-          flex: 9,
+          flex: 85,
           child: ListView.builder(
             itemCount: selectedLanguages.length,
             itemBuilder: (context, index) {

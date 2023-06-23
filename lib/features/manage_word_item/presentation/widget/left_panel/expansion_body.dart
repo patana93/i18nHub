@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/core/utils/colors.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/word_item_context_menu.dart';
@@ -16,7 +17,7 @@ class ExpansionBody extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final selectedItem = ref.watch(selectionWordItemControllerProvider)?.key;
     return SizedBox(
-      height: MediaQuery.of(context).size.height - 250,
+      height: nodeItem.wordItems.length * 50,
       child: ListView.separated(
         separatorBuilder: (context, index) => const Divider(height: 0),
         //controller: _scrollController,
@@ -25,10 +26,10 @@ class ExpansionBody extends ConsumerWidget {
           final item = nodeItem.wordItems[index];
           return ListTile(
             selected: (selectedItem ?? "") == item.key,
-            selectedTileColor: Colors.green,
-            hoverColor: Colors.pink,
-            tileColor: Colors.blue,
-            selectedColor: Colors.amber,
+            selectedTileColor: I18nColor.blue,
+            splashColor: I18nColor.blue,
+            tileColor: Colors.white,
+            selectedColor: Colors.white,
             onTap: () {
               ref
                   .read(selectionWordItemControllerProvider.notifier)
@@ -45,12 +46,14 @@ class ExpansionBody extends ConsumerWidget {
                           .any((element) => element.value.isEmpty),
                       child: const Icon(
                         Icons.warning,
-                        color: Colors.amber,
+                        color: Color(0xFFE6C229),
                       )),
                   WordItemContextMenu(
-                      nodeItem: nodeItem,
-                      item: item,
-                      textEditingController: textEditingController),
+                    nodeItem: nodeItem,
+                    item: item,
+                    textEditingController: textEditingController,
+                    isSelectedItem: (selectedItem ?? "") == item.key,
+                  ),
                 ],
               ),
             ),

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/core/utils/colors.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
@@ -10,10 +11,12 @@ class WordItemContextMenu extends ConsumerWidget {
   final TextEditingController textEditingController;
   final NodeModel nodeItem;
   final WordItem item;
+  final bool isSelectedItem;
   const WordItemContextMenu(
       {required this.nodeItem,
       required this.item,
       required this.textEditingController,
+      required this.isSelectedItem,
       super.key});
 
   @override
@@ -21,6 +24,7 @@ class WordItemContextMenu extends ConsumerWidget {
     return PopupMenuButton(
       splashRadius: 24,
       icon: const Icon(Icons.more_vert),
+      color: isSelectedItem ? Colors.white : I18nColor.blue,
       itemBuilder: (context) {
         return [
           PopupMenuItem(

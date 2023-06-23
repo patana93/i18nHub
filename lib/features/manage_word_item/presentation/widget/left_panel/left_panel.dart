@@ -19,6 +19,9 @@ class LeftPanel extends StatelessWidget {
           flex: 9,
           child: NodeList(textEditingController: textEditingController),
         ),
+        const SizedBox(
+          height: 45,
+        )
       ],
     );
   }

@@ -7,7 +7,7 @@ part of 'manage_word_item_controller.dart';
 // **************************************************************************
 
 String _$manageWordItemControllerHash() =>
-    r'a8af19376ace6568506679376e220ba79514cc60';
+    r'ebf81bb10e7b6d79305db22cc884d141d456ad1f';
 
 /// See also [ManageWordItemController].
 @ProviderFor(ManageWordItemController)

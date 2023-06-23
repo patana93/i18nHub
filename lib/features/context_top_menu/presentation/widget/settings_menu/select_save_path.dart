@@ -7,7 +7,7 @@ MenuEntry getSelecteSavePathMenu(BuildContext context) {
   final savePathController =
       TextEditingController(text: SharedPrefs.getString(SharedPrefs.savePath));
   return MenuEntry(
-      label: "Select Save Folder",
+      label: "Set Save Folder",
       onPressed: () async {
         showDialog(
           context: context,

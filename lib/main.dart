@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_app/core/utils/colors.dart';
 import 'package:i18n_app/core/utils/shared_prefs.dart';
 import 'package:i18n_app/features/context_top_menu/presentation/page/top_menu_bar.dart';
 import 'package:i18n_app/features/manage_word_item/presentation/page/manage_word_item_page.dart';
@@ -21,8 +22,12 @@ class MyApp extends StatelessWidget {
         title: 'Flutter Demo',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
-          primarySwatch: Colors.blue,
-        ),
+            primarySwatch: Colors.blue,
+            iconTheme: const IconThemeData(color: I18nColor.blue),
+            expansionTileTheme: const ExpansionTileThemeData(
+              collapsedIconColor: I18nColor.blue,
+              iconColor: I18nColor.blue,
+            )),
         home: Scaffold(
           body: FutureBuilder(
             future: _setSaveDir(),

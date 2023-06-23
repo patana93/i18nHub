@@ -132,9 +132,10 @@ class ManageWordItemController extends _$ManageWordItemController {
     state = [..._manageWordItemRepo.getAllNodeItems()];
   }
 
-  setPanelExpansion(String? searchString, NodeModel nodeItem) {
+  togglePanelExpansion(NodeModel nodeItem) {
     _manageWordItemRepo.toggleExpansion(nodeItem);
-    state = [..._manageWordItemRepo.filterData(searchString ?? "")];
+
+    filterData();
 
     ref
         .read(selectionWordItemControllerProvider.notifier)

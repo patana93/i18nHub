@@ -9,6 +9,8 @@ class RightPanel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    print("object2");
+
     final selectedItem = ref.watch(selectionWordItemControllerProvider);
 
     return Container(

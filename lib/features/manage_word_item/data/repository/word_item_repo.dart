@@ -19,7 +19,7 @@ class ManageWordItemRepo {
     nodeItems.add(NodeModel(
         nodeKey: nodeKey,
         wordItems: wordItem ?? [],
-        isPanelExpanded: isExpanded ?? false));
+        isPanelExpanded: isExpanded ?? true));
     sortNode();
   }
 
@@ -206,6 +206,6 @@ class ManageWordItemRepo {
     addNodeItem(
         nodeKey: nodeItem.nodeKey,
         wordItem: nodeItem.wordItems,
-        isExpanded: !(nodeItem.isPanelExpanded ?? true));
+        isExpanded: !(nodeItem.isPanelExpanded ?? false));
   }
 }

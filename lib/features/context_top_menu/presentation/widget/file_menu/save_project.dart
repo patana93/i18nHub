@@ -15,6 +15,10 @@ class SaveProjectDialog extends StatelessWidget {
         key: formKey,
         child: TextFormField(
           controller: controller,
+          decoration: InputDecoration(
+              hintText: "Type file name...",
+              border:
+                  OutlineInputBorder(borderRadius: BorderRadius.circular(12))),
           validator: (value) {
             if (value != null && value.isEmpty) {
               return "File name cannot be empty";
