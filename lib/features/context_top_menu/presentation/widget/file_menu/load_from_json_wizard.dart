@@ -1,18 +1,20 @@
 import 'dart:convert';
 import 'dart:io';
 
+import 'package:collection/collection.dart';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/const.dart';
-import 'package:i18n_app/core/utils/languages_enum.dart';
-import 'package:i18n_app/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
-import 'package:i18n_app/features/context_top_menu/presentation/controller/load_from_json_controller.dart';
-import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/core/utils/const.dart';
+import 'package:i18n_hub/core/utils/languages_enum.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/controller/load_from_json_controller.dart';
+import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/translation_model.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 import 'package:path_provider/path_provider.dart';
 
 class LoadFromJsonWizard extends ConsumerStatefulWidget {
@@ -31,8 +33,13 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
     return AlertDialog(
       title: const Text("Load form Json wizard"),
       content: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text("data"),
+          const Text(
+              "With this wizard you can load you JSON file named with country code (ex: en.json or en-us.json). The region will be not detected."),
+          const SizedBox(
+            height: 12,
+          ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
@@ -57,8 +64,11 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                         .loadLanguage(files.first.path);
                     setState(() {});
                   },
-                  child: const Text("Add")),
+                  child: const Text("Add JSON")),
             ],
+          ),
+          const SizedBox(
+            height: 12,
           ),
           Expanded(
             child: SizedBox(
@@ -66,9 +76,21 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
               child: ListView.builder(
                 itemCount: languages.length,
                 itemBuilder: (context, index) => ListTile(
+                    tileColor: LanguagesAvailable.getLanguageName(
+                              languages[index].substring(
+                                languages[index].lastIndexOf("\\") + 1,
+                                languages[index].lastIndexOf("."),
+                              ),
+                            ) ==
+                            "Invalid code"
+                        ? I18nColor.alert
+                        : Colors.white,
                     title: Text(languages[index]),
                     trailing: IconButton(
-                      icon: const Icon(Icons.delete),
+                      icon: const Icon(
+                        Icons.delete,
+                        color: I18nColor.blue,
+                      ),
                       onPressed: () => setState(() {
                         ref
                             .read(loadFromJsonControllerProvider.notifier)
@@ -101,12 +123,14 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
           )
         ],
       ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        ElevatedButton(
+        TextButton(
           onPressed: () => Navigator.of(context).pop(),
           child: const Text("Cancel"),
         ),
         ElevatedButton(
+          //TODO Clean this code
           onPressed: () async {
             final languagesAvailable =
                 LanguagesAvailable.values.firstWhere((element) =>
@@ -138,6 +162,19 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
             ref.read(manageLanguageControllerProvider.notifier).clear();
             final List<NodeModel> nodeItemList = [];
             for (var lil in languages) {
+              final bb = LanguagesAvailable.values.firstWhereOrNull((element) =>
+                  element.name ==
+                  LanguagesAvailable.getLanguageName(
+                    lil.substring(
+                      languages.first.lastIndexOf("\\") + 1,
+                      languages.first.lastIndexOf("."),
+                    ),
+                  ));
+
+              if (bb == null) {
+                return;
+              }
+
               await getApplicationDocumentsDirectory().then(
                 (Directory directory) {
                   final dir = lil;
@@ -207,6 +244,9 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                 }
                 alreadyWordItemKey.add(wordItem.key);
               }
+            }
+            if (context.mounted) {
+              Navigator.of(context).pop();
             }
           },
           child: const Text("Load"),

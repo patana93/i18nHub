@@ -1,7 +1,7 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
-import 'package:i18n_app/core/utils/shared_prefs.dart';
-import 'package:i18n_app/features/context_top_menu/domain/model/menu_entry.dart';
+import 'package:i18n_hub/core/utils/shared_prefs.dart';
+import 'package:i18n_hub/features/context_top_menu/domain/model/menu_entry.dart';
 
 MenuEntry getSelecteSavePathMenu(BuildContext context) {
   final savePathController =

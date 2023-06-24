@@ -1,4 +1,4 @@
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'validate_key_controller.g.dart';

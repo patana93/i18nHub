@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/controller/text_cursor_position.dart';
-import 'package:i18n_app/core/utils/colors.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/translation_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/translation_edit_text_focus_controller.dart';
+import 'package:i18n_hub/core/controller/text_cursor_position.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/translation_model.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/translation_edit_text_focus_controller.dart';
 
 class TranslationItem extends ConsumerWidget {
   final int index;
@@ -62,7 +62,21 @@ class TranslationItem extends ConsumerWidget {
                           .elementAt(index)
                           .isEqualToDefault,
                   decoration: InputDecoration(
-                    border: const OutlineInputBorder(),
+                    disabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: languageTextController.text.isEmpty
+                                ? I18nColor.alert
+                                : I18nColor.blue)),
+                    focusedBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: languageTextController.text.isEmpty
+                                ? I18nColor.alert
+                                : I18nColor.blue)),
+                    enabledBorder: OutlineInputBorder(
+                        borderSide: BorderSide(
+                            color: languageTextController.text.isEmpty
+                                ? I18nColor.alert
+                                : I18nColor.blue)),
                     contentPadding: const EdgeInsets.only(
                         top: 30, bottom: 12, left: 12, right: 12),
                     hintText: "Empty...",
@@ -81,8 +95,10 @@ class TranslationItem extends ConsumerWidget {
                     floatingLabelStyle: MaterialStateTextStyle.resolveWith(
                       (Set<MaterialState> states) {
                         return states.contains(MaterialState.focused)
-                            ? const TextStyle(
-                                color: I18nColor.blue,
+                            ? TextStyle(
+                                color: languageTextController.text.isEmpty
+                                    ? I18nColor.alert
+                                    : I18nColor.blue,
                                 fontSize: 22,
                                 fontWeight: FontWeight.bold)
                             : const TextStyle(
@@ -126,6 +142,18 @@ class TranslationItem extends ConsumerWidget {
                                 .elementAt(index)
                                 .isEqualToDefault,
                         onChanged: (value) {
+                          if (selectedItem.translations.first.value.isEmpty &&
+                              value == true) {
+                            showDialog(
+                              context: context,
+                              builder: (context) => const AlertDialog(
+                                title: Text("Error"),
+                                content: Text("Main language cannot be empty"),
+                              ),
+                            );
+                            return;
+                          }
+
                           ref
                               .read(manageWordItemControllerProvider.notifier)
                               .editWordTranslation(

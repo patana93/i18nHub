@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
 
 class SaveProjectDialog extends StatelessWidget {
   const SaveProjectDialog({super.key});
@@ -27,8 +27,9 @@ class SaveProjectDialog extends StatelessWidget {
           },
         ),
       ),
+      actionsAlignment: MainAxisAlignment.spaceBetween,
       actions: [
-        ElevatedButton(
+        TextButton(
             onPressed: () => Navigator.of(context).pop(),
             child: const Text("Cancel")),
         Consumer(builder: (context, ref, child) {

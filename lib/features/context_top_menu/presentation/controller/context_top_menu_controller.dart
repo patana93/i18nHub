@@ -2,12 +2,12 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
-import 'package:i18n_app/core/utils/const.dart';
-import 'package:i18n_app/core/utils/languages_enum.dart';
-import 'package:i18n_app/core/utils/shared_prefs.dart';
-import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_hub/core/utils/const.dart';
+import 'package:i18n_hub/core/utils/languages_enum.dart';
+import 'package:i18n_hub/core/utils/shared_prefs.dart';
+import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 

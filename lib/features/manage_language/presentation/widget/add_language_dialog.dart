@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/features/manage_language/data/repository/manage_language_repo.dart';
-import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/core/utils/languages_enum.dart';
+import 'package:i18n_hub/features/manage_language/data/repository/manage_language_repo.dart';
+import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_hub/core/utils/languages_enum.dart';
 
 class AddLanaguageDialog extends ConsumerWidget {
   const AddLanaguageDialog({super.key});

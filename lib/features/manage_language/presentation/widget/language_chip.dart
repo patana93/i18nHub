@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/colors.dart';
-import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
 
 import '../../../../core/utils/languages_enum.dart';
 
@@ -78,8 +78,9 @@ class LanguageChip extends ConsumerWidget {
             const TextSpan(text: " language from all entries"),
           ]),
         ),
+        actionsAlignment: MainAxisAlignment.spaceBetween,
         actions: [
-          ElevatedButton(
+          TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: const Text("Cancel")),
           ElevatedButton(

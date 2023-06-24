@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/search_focus_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/search_text_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/add_edit_node_dialog.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/search_focus_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/search_text_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/left_panel/add_edit_node_dialog.dart';
 
 class SearchItemsBar extends ConsumerWidget {
   final TextEditingController searchTextEditingController;

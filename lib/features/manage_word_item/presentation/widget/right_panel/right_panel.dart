@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/right_panel/no_selected_item.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/right_panel/translation_list.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/right_panel/no_selected_item.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/right_panel/translation_list.dart';
 
 class RightPanel extends ConsumerWidget {
   const RightPanel({super.key});

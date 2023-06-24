@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/colors.dart';
-import 'package:i18n_app/features/manage_language/presentation/widget/add_language_dialog.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/features/manage_language/presentation/widget/add_language_dialog.dart';
 
 class AddLanguageActionChip extends ConsumerWidget {
   const AddLanguageActionChip({super.key});
@@ -40,8 +40,8 @@ class AddLanguageActionChip extends ConsumerWidget {
       },
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8))),
-      backgroundColor: I18nColor.panelColor,
-      shadowColor: I18nColor.panelColor.withOpacity(0.7),
+      backgroundColor: I18nColor.blue,
+      shadowColor: I18nColor.blue.withOpacity(0.7),
     );
   }
 }

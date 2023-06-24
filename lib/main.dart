@@ -1,13 +1,28 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/colors.dart';
-import 'package:i18n_app/core/utils/shared_prefs.dart';
-import 'package:i18n_app/features/context_top_menu/presentation/page/top_menu_bar.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/page/manage_word_item_page.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/core/utils/shared_prefs.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/page/top_menu_bar.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/page/manage_word_item_page.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:window_manager/window_manager.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(1400, 800),
+    minimumSize: Size(1000, 600),
+    center: true,
+    windowButtonVisibility: true,
+    skipTaskbar: false,
+    title: "i18nHub",
+    titleBarStyle: TitleBarStyle.normal,
+  );
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+  });
   await SharedPrefs.init();
   runApp(const ProviderScope(child: MyApp()));
 }
@@ -19,7 +34,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-        title: 'Flutter Demo',
+        title: 'i18nHub',
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             primarySwatch: Colors.blue,

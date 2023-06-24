@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/colors.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/word_item_context_menu.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/left_panel/word_item_context_menu.dart';
 
 class ExpansionBody extends ConsumerWidget {
 //final ScrollController _scrollController = ScrollController();
@@ -46,7 +46,7 @@ class ExpansionBody extends ConsumerWidget {
                           .any((element) => element.value.isEmpty),
                       child: const Icon(
                         Icons.warning,
-                        color: Color(0xFFE6C229),
+                        color: I18nColor.alert,
                       )),
                   WordItemContextMenu(
                     nodeItem: nodeItem,

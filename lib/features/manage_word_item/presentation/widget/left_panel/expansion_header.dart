@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/colors.dart';
-import 'package:i18n_app/features/manage_word_item/domain/model/node_model.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/add_edit_key_dialog.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/add_edit_node_dialog.dart';
+import 'package:i18n_hub/core/utils/colors.dart';
+import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/left_panel/add_edit_key_dialog.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/left_panel/add_edit_node_dialog.dart';
 
 class ExpansionHeader extends ConsumerWidget {
   final TextEditingController searchTextEditingController;
@@ -19,6 +19,7 @@ class ExpansionHeader extends ConsumerWidget {
     return Padding(
       padding: const EdgeInsets.all(8.0),
       child: Row(
+        mainAxisAlignment: MainAxisAlignment.end,
         children: [
           Visibility(
               visible: nodeItem.wordItems.any((element) =>
@@ -27,19 +28,25 @@ class ExpansionHeader extends ConsumerWidget {
                 children: [
                   Icon(
                     Icons.warning,
-                    color: Color(0xFFE6C229),
+                    color: I18nColor.alert,
                   ),
                   SizedBox(
                     width: 8,
                   ),
                 ],
               )),
-          Text(nodeItem.nodeKey,
-              style: Theme.of(context)
-                  .textTheme
-                  .titleLarge
-                  ?.copyWith(color: I18nColor.blue)),
-          const Spacer(),
+          Flexible(
+            child: Align(
+              alignment: Alignment.centerLeft,
+              child: Text(nodeItem.nodeKey,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleLarge
+                      ?.copyWith(color: I18nColor.blue)),
+            ),
+          ),
           IconButton(
               onPressed: () {
                 showDialog(
@@ -60,18 +67,22 @@ class ExpansionHeader extends ConsumerWidget {
                     title: const Text("Are you sure?"),
                     content: RichText(
                       text: TextSpan(
-                          style: DefaultTextStyle.of(context).style,
+                          style: DefaultTextStyle.of(context)
+                              .style
+                              .copyWith(color: Colors.black),
                           children: [
                             const TextSpan(text: "You are deleting "),
                             TextSpan(
                                 text: nodeItem.nodeKey,
                                 style: const TextStyle(
+                                    color: Colors.black,
                                     fontWeight: FontWeight.bold)),
                             const TextSpan(text: " node and all its elements"),
                           ]),
                     ),
+                    actionsAlignment: MainAxisAlignment.spaceBetween,
                     actions: [
-                      ElevatedButton(
+                      TextButton(
                           onPressed: () => Navigator.of(context).pop(),
                           child: const Text("Cancel")),
                       ElevatedButton(

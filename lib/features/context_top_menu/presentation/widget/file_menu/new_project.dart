@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/core/utils/languages_enum.dart';
-import 'package:i18n_app/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
-import 'package:i18n_app/features/context_top_menu/domain/model/menu_entry.dart';
-import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
+import 'package:i18n_hub/core/utils/languages_enum.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
+import 'package:i18n_hub/features/context_top_menu/domain/model/menu_entry.dart';
+import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/controller/selection_word_item_controller.dart';
 
 MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
   return MenuEntry(

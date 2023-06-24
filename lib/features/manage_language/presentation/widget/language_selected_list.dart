@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:i18n_app/features/manage_language/presentation/controller/manage_language_controller.dart';
-import 'package:i18n_app/features/manage_language/presentation/widget/language_chip.dart';
+import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
+import 'package:i18n_hub/features/manage_language/presentation/widget/language_chip.dart';
 
 class LanguageSelectedChipList extends ConsumerWidget {
   const LanguageSelectedChipList({super.key});

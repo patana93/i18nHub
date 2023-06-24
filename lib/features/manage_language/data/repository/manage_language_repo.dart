@@ -1,4 +1,4 @@
-import 'package:i18n_app/core/utils/languages_enum.dart';
+import 'package:i18n_hub/core/utils/languages_enum.dart';
 
 typedef Language = ({String code, String name});
 

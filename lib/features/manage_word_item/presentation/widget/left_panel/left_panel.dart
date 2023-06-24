@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/node_list.dart';
-import 'package:i18n_app/features/manage_word_item/presentation/widget/left_panel/search_bar.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/left_panel/node_list.dart';
+import 'package:i18n_hub/features/manage_word_item/presentation/widget/left_panel/search_bar.dart';
 
 class LeftPanel extends StatelessWidget {
   const LeftPanel({super.key});

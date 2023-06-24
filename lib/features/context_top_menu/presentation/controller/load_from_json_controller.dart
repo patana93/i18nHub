@@ -1,4 +1,4 @@
-import 'package:i18n_app/features/context_top_menu/data/repository/load_from_json_repo.dart';
+import 'package:i18n_hub/features/context_top_menu/data/repository/load_from_json_repo.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
 part 'load_from_json_controller.g.dart';
