@@ -5,6 +5,12 @@ class NoSelectedItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const SizedBox(width: double.infinity, child: Text("no selection"));
+    return Center(
+        child: Text(
+      "No word selected",
+      style: Theme.of(context).textTheme.displaySmall?.copyWith(
+            color: Colors.grey,
+          ),
+    ));
   }
 }
