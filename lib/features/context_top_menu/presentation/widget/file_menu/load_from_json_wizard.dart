@@ -36,7 +36,7 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const Text(
-              "With this wizard you can load you JSON file named with country code (ex: en.json or en-us.json). The region will be not detected."),
+              "With this wizard you can load you JSON file named with country code (ex: en.json or en-us.json). The region will be not detected. Load files with nodes is not supported yet"),
           const SizedBox(
             height: 12,
           ),
