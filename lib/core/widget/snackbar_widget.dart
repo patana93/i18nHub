@@ -10,9 +10,17 @@ class I18NSnackBar {
 
   static displayErrorSnackbar(BuildContext context, {String? errorMessage}) {
     ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-      content: Text(errorMessage ?? "Error"),
+      content: Text(
+        errorMessage ?? "Error",
+        style: Theme.of(context)
+            .textTheme
+            .headlineSmall
+            ?.copyWith(color: Colors.white),
+      ),
       backgroundColor: I18nColor.alert,
       behavior: SnackBarBehavior.floating,
+      width: MediaQuery.of(context).size.width / 4,
+      elevation: 8,
     ));
   }
 

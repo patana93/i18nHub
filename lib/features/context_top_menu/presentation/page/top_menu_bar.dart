@@ -102,6 +102,12 @@ class TopMenuBar extends ConsumerWidget {
           getSelecteSavePathMenu(context),
         ],
       ),
+      MenuEntry(
+        label: 'Help',
+        menuChildren: <MenuEntry>[
+          getSelecteSavePathMenu(context),
+        ],
+      ),
     ];
     return result;
   }
