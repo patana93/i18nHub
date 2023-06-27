@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:i18n_hub/core/widget/snackbar_widget.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/widget/file_menu/load_from_json_wizard.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/widget/file_menu/new_project.dart';
@@ -28,6 +29,7 @@ class TopMenuBar extends ConsumerWidget {
     );
   }
 
+  //TODO Improve snackbar (add also error case)
   List<MenuEntry> _getMenus(BuildContext context, WidgetRef ref) {
     final List<MenuEntry> result = <MenuEntry>[
       MenuEntry(
@@ -36,37 +38,62 @@ class TopMenuBar extends ConsumerWidget {
           getNewProjectMenu(context, ref),
           MenuEntry(
               label: "Save Project",
-              onPressed: () => showDialog(
-                  context: context,
-                  builder: (context) => const SaveProjectDialog())),
+              onPressed: () async {
+                await showDialog(
+                    context: context,
+                    builder: (context) => const SaveProjectDialog());
+                if (context.mounted) {
+                  I18NSnackBar.displaySuccessSnackbar(context,
+                      successMessage: "Project saved");
+                }
+              }),
           MenuEntry(
-            label: "Save as JSONs",
-            onPressed: () => ref
-                .read(contextTopMenuControllerProvider.notifier)
-                .saveJsonLanguages(isWithNodes: false),
-          ),
+              label: "Save as JSONs",
+              onPressed: () {
+                ref
+                    .read(contextTopMenuControllerProvider.notifier)
+                    .saveJsonLanguages(isWithNodes: false);
+
+                I18NSnackBar.displaySuccessSnackbar(context,
+                    successMessage: "JSONs created");
+              }),
           MenuEntry(
             label: "Save as JSONs with nodes",
-            onPressed: () => ref
-                .read(contextTopMenuControllerProvider.notifier)
-                .saveJsonLanguages(isWithNodes: true),
+            onPressed: () {
+              ref
+                  .read(contextTopMenuControllerProvider.notifier)
+                  .saveJsonLanguages(isWithNodes: true);
+
+              I18NSnackBar.displaySuccessSnackbar(context,
+                  successMessage: "JSONs with node created");
+            },
           ),
           MenuEntry(
             label: "Load project",
-            onPressed: () => ref
-                .read(contextTopMenuControllerProvider.notifier)
-                .loadProject(),
+            onPressed: () async {
+              await ref
+                  .read(contextTopMenuControllerProvider.notifier)
+                  .loadProject(context)
+                  .whenComplete(() => I18NSnackBar.displaySuccessSnackbar(
+                      context,
+                      successMessage: "Project loaded"));
+            },
           ),
           MenuEntry(
-            label: "Load from JSONs",
-            onPressed: () => showDialog(
-              barrierDismissible: false,
-              context: context,
-              builder: (context) => ProviderScope(
-                  parent: ProviderScope.containerOf(context),
-                  child: const LoadFromJsonWizard()),
-            ),
-          )
+              label: "Load from JSONs",
+              onPressed: () async {
+                await showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (context) => ProviderScope(
+                      parent: ProviderScope.containerOf(context),
+                      child: const LoadFromJsonWizard()),
+                );
+                if (context.mounted) {
+                  I18NSnackBar.displaySuccessSnackbar(context,
+                      successMessage: "JSONs loaded");
+                }
+              })
         ],
       ),
       MenuEntry(

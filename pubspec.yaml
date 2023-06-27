@@ -40,10 +40,11 @@ dependencies:
   collection: ^1.16.0
   equatable: ^2.0.5
   json_serializable: ^6.6.1
-  json_annotation: ^4.8.0
+  json_annotation: ^4.8.1
   file_picker: ^5.2.5
   shared_preferences: ^2.1.1
   window_manager: ^0.3.4
+  flutter_donation_buttons: ^0.3.7
 
 
 dev_dependencies:

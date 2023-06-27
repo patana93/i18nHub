@@ -9,6 +9,7 @@ import 'package:i18n_hub/core/utils/colors.dart';
 import 'package:i18n_hub/core/utils/const.dart';
 import 'package:i18n_hub/core/utils/languages_enum.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/controller/current_file_controller.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/controller/load_from_json_controller.dart';
 import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
@@ -244,6 +245,8 @@ class _LoadFromJsonWizardState extends ConsumerState<LoadFromJsonWizard> {
                 }
                 alreadyWordItemKey.add(wordItem.key);
               }
+
+              ref.read(currentFileControllerProvider.notifier).removeLanguage();
             }
             if (context.mounted) {
               Navigator.of(context).pop();

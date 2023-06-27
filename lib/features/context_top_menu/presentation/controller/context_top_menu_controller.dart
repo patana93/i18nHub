@@ -2,9 +2,11 @@ import 'dart:convert';
 import 'dart:io';
 
 import 'package:file_picker/file_picker.dart';
+import 'package:flutter/material.dart';
 import 'package:i18n_hub/core/utils/const.dart';
 import 'package:i18n_hub/core/utils/languages_enum.dart';
 import 'package:i18n_hub/core/utils/shared_prefs.dart';
+import 'package:i18n_hub/features/context_top_menu/presentation/controller/current_file_controller.dart';
 import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
 import 'package:i18n_hub/features/manage_word_item/domain/model/node_model.dart';
 import 'package:i18n_hub/features/manage_word_item/presentation/controller/manage_word_item_controller.dart';
@@ -26,16 +28,19 @@ class ContextTopMenuController extends _$ContextTopMenuController {
     ref
         .read(manageWordItemControllerProvider.notifier)
         .addNodeItem(mainNodeName);
+    ref.read(currentFileControllerProvider.notifier).removeLanguage();
   }
 
   void saveProject(String fileName) {
-    String filename = "$fileName.i18n";
+    String filenameWithExtension = "$fileName.i18n";
 
     final wordItems = ref.watch(manageWordItemControllerProvider);
     final saveDir = SharedPrefs.getString(SharedPrefs.savePath);
-    File file = File("$saveDir/$filename");
+    File file = File("$saveDir/$filenameWithExtension");
     file.createSync();
     file.writeAsStringSync(jsonEncode(wordItems));
+
+    ref.read(currentFileControllerProvider.notifier).setCurrentFile(fileName);
   }
 
   void saveJsonLanguages({required bool isWithNodes}) {
@@ -75,7 +80,7 @@ class ContextTopMenuController extends _$ContextTopMenuController {
     }
   }
 
-  void loadProject() async {
+  Future<void> loadProject(BuildContext context) async {
     FilePickerResult? result = await FilePicker.platform.pickFiles(
         lockParentWindow: true,
         type: FileType.custom,
@@ -140,6 +145,10 @@ class ContextTopMenuController extends _$ContextTopMenuController {
           }
         }
       },
+    ).whenComplete(
+      () => ref.read(currentFileControllerProvider.notifier).setCurrentFile(
+          files!.first.path.substring(files.first.path.lastIndexOf("\\") + 1,
+              files.first.path.lastIndexOf("."))),
     );
   }
 }

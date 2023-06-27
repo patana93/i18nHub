@@ -2,6 +2,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 class SharedPrefs {
   static const String savePath = "save_path";
+  static const String currentFile = "current_file";
 
   static Future<SharedPreferences> init() async {
     _prefsInstance = await _instance;

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_hub/core/utils/languages_enum.dart';
+import 'package:i18n_hub/core/widget/snackbar_widget.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/controller/context_top_menu_controller.dart';
 import 'package:i18n_hub/features/context_top_menu/domain/model/menu_entry.dart';
 import 'package:i18n_hub/features/manage_language/presentation/controller/manage_language_controller.dart';
@@ -9,8 +10,8 @@ import 'package:i18n_hub/features/manage_word_item/presentation/controller/selec
 MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
   return MenuEntry(
     label: 'New Project',
-    onPressed: () {
-      showDialog(
+    onPressed: () async {
+      await showDialog(
         context: context,
         builder: (context) {
           return Dialog(
@@ -96,6 +97,11 @@ MenuEntry getNewProjectMenu(BuildContext context, WidgetRef ref) {
           );
         },
       );
+
+      if (context.mounted) {
+        I18NSnackBar.displaySuccessSnackbar(context,
+            successMessage: "Project created");
+      }
     },
   );
 }

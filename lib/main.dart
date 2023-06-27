@@ -51,7 +51,11 @@ class MyApp extends StatelessWidget {
                 padding: EdgeInsets.all(8.0),
                 child: Column(
                   children: [
-                    TopMenuBar(),
+                    Row(
+                      children: [
+                        TopMenuBar(),
+                      ],
+                    ),
                     SizedBox(
                       height: 4,
                     ),
