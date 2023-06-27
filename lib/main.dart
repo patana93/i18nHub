@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:i18n_hub/core/utils/colors.dart';
 import 'package:i18n_hub/core/utils/shared_prefs.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/page/top_menu_bar.dart';
+import 'package:i18n_hub/features/donate/presentation/widgets/donate_widget.dart';
 import 'package:i18n_hub/features/manage_word_item/presentation/page/manage_word_item_page.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:window_manager/window_manager.dart';
@@ -53,7 +54,11 @@ class MyApp extends StatelessWidget {
                   children: [
                     Row(
                       children: [
-                        TopMenuBar(),
+                        Expanded(child: TopMenuBar()),
+                        SizedBox(
+                          width: 18,
+                        ),
+                        DonateWidget(),
                       ],
                     ),
                     SizedBox(
