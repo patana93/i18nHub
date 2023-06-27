@@ -7,6 +7,7 @@ import 'package:i18n_hub/features/context_top_menu/presentation/widget/file_menu
 import 'package:i18n_hub/features/context_top_menu/domain/model/menu_entry.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/widget/file_menu/save_project.dart';
 import 'package:i18n_hub/features/context_top_menu/presentation/widget/settings_menu/select_save_path.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class TopMenuBar extends ConsumerWidget {
   const TopMenuBar({super.key});
@@ -105,7 +106,18 @@ class TopMenuBar extends ConsumerWidget {
       MenuEntry(
         label: 'Help',
         menuChildren: <MenuEntry>[
-          getSelecteSavePathMenu(context),
+          MenuEntry(
+              label: "README",
+              onPressed: () async {
+                if (!await launchUrl(
+                    Uri.parse("https://github.com/patana93/i18n_app#readme"))) {
+                } else {
+                  if (context.mounted) {
+                    I18NSnackBar.displayErrorSnackbar(context,
+                        errorMessage: "Cannot open the link");
+                  }
+                }
+              })
         ],
       ),
     ];

@@ -1,4 +1,4 @@
-# Translation Management Application
+# i18nHub
 
 With this application, you can easily manage translations for any application that uses the JSON format.
 
