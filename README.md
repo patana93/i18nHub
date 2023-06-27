@@ -47,7 +47,8 @@ Use the save button to save the project. The text at the bottom left of the appl
 ## Known Issue
 
 Sometimes, when there are expanded panels and a node is added, it may glitch.
-Contributing
+
+## Contributing
 
 We appreciate your interest in contributing to this project! To ensure a smooth collaboration process, please follow the guidelines below:
 
