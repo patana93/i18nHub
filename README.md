@@ -1,8 +1,10 @@
+![icon](https://github.com/patana93/i18n_app/assets/34345594/ba554f12-5fd7-4538-b6b7-86f08b82927d) 
+
 # i18nHub
 
 With this application, you can easily manage translations for any application that uses the JSON format.
 
-![i18nHub_screenshot](https://github.com/patana93/i18n_app/assets/34345594/de68e526-1b8f-4716-97e0-34f3f1320c02)
+![Screenshot 2023-06-30 143053](https://github.com/patana93/i18n_app/assets/34345594/35e51c04-d64b-4fb9-ad52-8a415da98701)
 
 ## Installation
 
