@@ -8,10 +8,21 @@ With this application, you can easily manage translations for any application th
 
 ## Installation
 
-To use the application, you have two options:
+To use the application, you have these options:
+
+### Windows
 
 1. Download the repository and run the application.
-2. Download the latest release for your operating system and run the application.
+2. Download the latest release and install the application.
+3. Download the zip file and run the .exe file.
+
+### macOS
+
+1. Download the release file and run it.
+
+### Release link:
+
+https://github.com/patana93/i18n_app/releases/tag/v.1.0.0
 
 ## Features
 
