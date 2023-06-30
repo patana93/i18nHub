@@ -45,6 +45,7 @@ dependencies:
   shared_preferences: ^2.1.1
   window_manager: ^0.3.4
   url_launcher: ^6.1.11
+  flutter_launcher_icons: ^0.13.1
 
 
 dev_dependencies:
